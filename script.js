@@ -1,47 +1,83 @@
 // =====================================================
 // J.A.R.V.I.S - AI CORE
 // Gemini + Cloudflare + Memory + Voice + HUD
+// Telugu + English Voice
+// Phase 2: Weather + Location + Time + Date
 // =====================================================
+
 
 // =====================================================
 // CONFIGURATION
 // =====================================================
 
 const JARVIS_API =
-    "https://jarvis.princeharikrishna1-netizen.workers.dev/api/chat";
+    "https://jarvis.princeharikrishna1.workers.dev/api/chat";
+
+const WEATHER_API =
+    "https://api.open-meteo.com/v1/forecast";
+
+const MEMORY_KEY =
+    "jarvisMemory";
 
 
 // =====================================================
 // ELEMENTS
 // =====================================================
 
-const chat = document.getElementById("chat");
-const msg = document.getElementById("msg");
-const send = document.getElementById("send");
-const micBtn = document.getElementById("mic-btn");
-const camBtn = document.getElementById("cam-btn");
-const clearBtn = document.getElementById("clear-btn");
-const imgInput = document.getElementById("img-input");
-const coreStatus = document.querySelector(".core-status");
+const chat =
+    document.getElementById("chat");
+
+const msg =
+    document.getElementById("msg");
+
+const send =
+    document.getElementById("send");
+
+const micBtn =
+    document.getElementById("mic-btn");
+
+const camBtn =
+    document.getElementById("cam-btn");
+
+const clearBtn =
+    document.getElementById("clear-btn");
+
+const imgInput =
+    document.getElementById("img-input");
+
+const coreStatus =
+    document.querySelector(".core-status");
 
 
 // =====================================================
 // MEMORY
 // =====================================================
 
-const MEMORY_KEY = "jarvisMemory";
-
 let memory = [];
 
 try {
-    const saved = localStorage.getItem(MEMORY_KEY);
+
+    const saved =
+        localStorage.getItem(
+            MEMORY_KEY
+        );
 
     if (saved) {
-        memory = JSON.parse(saved);
+
+        memory =
+            JSON.parse(saved);
+
     }
+
 } catch (error) {
-    console.error("Memory load error:", error);
+
+    console.error(
+        "Memory load error:",
+        error
+    );
+
     memory = [];
+
 }
 
 
@@ -49,7 +85,9 @@ try {
 // HUD STATE
 // =====================================================
 
-function setHudState(state = "ready") {
+function setHudState(
+    state = "ready"
+) {
 
     document.body.classList.remove(
         "thinking",
@@ -57,24 +95,69 @@ function setHudState(state = "ready") {
         "speaking"
     );
 
+
     if (state === "thinking") {
-        document.body.classList.add("thinking");
-        setStatus("THINKING...");
+
+        document.body.classList.add(
+            "thinking"
+        );
+
+        setStatus(
+            "THINKING..."
+        );
+
     }
 
     else if (state === "listening") {
-        document.body.classList.add("listening");
-        setStatus("LISTENING...");
+
+        document.body.classList.add(
+            "listening"
+        );
+
+        setStatus(
+            "LISTENING..."
+        );
+
     }
 
     else if (state === "speaking") {
-        document.body.classList.add("speaking");
-        setStatus("SPEAKING...");
+
+        document.body.classList.add(
+            "speaking"
+        );
+
+        setStatus(
+            "SPEAKING..."
+        );
+
     }
 
     else {
-        setStatus("SYSTEM READY");
+
+        setStatus(
+            "SYSTEM READY"
+        );
+
     }
+
+}
+
+
+// =====================================================
+// STATUS
+// =====================================================
+
+function setStatus(
+    text
+) {
+
+    if (coreStatus) {
+
+        coreStatus.textContent =
+            text;
+
+    }
+
 }
 
 
@@ -93,7 +176,9 @@ function saveMemory() {
             )
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Memory save error:",
@@ -101,11 +186,12 @@ function saveMemory() {
         );
 
     }
+
 }
 
 
 // =====================================================
-// ADD MESSAGE TO UI
+// ADD MESSAGE
 // =====================================================
 
 function addMessage(
@@ -118,39 +204,65 @@ function addMessage(
         return;
     }
 
+
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     message.className =
         `message ${sender}`;
 
+
     const label =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     label.className =
         "message-label";
+
 
     label.textContent =
         sender === "user"
             ? "BOSS"
             : "J.A.R.V.I.S";
 
+
     const content =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     content.className =
         "message-content";
 
+
     content.textContent =
         text;
 
-    message.appendChild(label);
-    message.appendChild(content);
 
-    chat.appendChild(message);
+    message.appendChild(
+        label
+    );
+
+
+    message.appendChild(
+        content
+    );
+
+
+    chat.appendChild(
+        message
+    );
+
 
     chat.scrollTop =
         chat.scrollHeight;
+
 
     if (save) {
 
@@ -161,15 +273,20 @@ function addMessage(
                     ? "user"
                     : "model",
 
-            text: text,
+            text:
+                text,
 
             time:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
 
         });
 
+
         saveMemory();
+
     }
+
 }
 
 
@@ -184,7 +301,9 @@ function loadMemory() {
         memory = [];
 
         return;
+
     }
+
 
     memory
         .slice(-20)
@@ -203,110 +322,282 @@ function loadMemory() {
             );
 
         });
+
 }
 
 
 // =====================================================
-// SPEECH
+// VOICE ENGINE
+// TELUGU + ENGLISH
 // =====================================================
 
-function speak(text) {
+function speak(
+    text
+) {
 
-    if (!("speechSynthesis" in window)) {
+    if (
+        !(
+            "speechSynthesis"
+            in window
+        )
+    ) {
+
+        console.warn(
+            "Speech synthesis not supported."
+        );
+
         return;
+
     }
+
 
     window.speechSynthesis.cancel();
 
+
     const cleanText =
         text
-            .replace(/[*_#`]/g, "")
+            .replace(
+                /[*_#`]/g,
+                ""
+            )
             .trim();
+
 
     if (!cleanText) {
         return;
     }
+
+
+    const isTelugu =
+        /[\u0C00-\u0C7F]/
+            .test(
+                cleanText
+            );
+
+
+    const language =
+        isTelugu
+            ? "te-IN"
+            : "en-IN";
+
 
     const utterance =
         new SpeechSynthesisUtterance(
             cleanText
         );
 
-    // Telugu / English
-    if (
-        /[\u0C00-\u0C7F]/.test(
-            cleanText
-        )
-    ) {
 
-        utterance.lang =
-            "te-IN";
+    utterance.lang =
+        language;
 
-    } else {
-
-        utterance.lang =
-            "en-IN";
-
-    }
 
     utterance.rate =
-        0.95;
+        isTelugu
+            ? 0.90
+            : 0.95;
+
 
     utterance.pitch =
         1.0;
+
 
     utterance.volume =
         1.0;
 
 
+    // ---------------------------------------------
+    // FIND AVAILABLE VOICE
+    // ---------------------------------------------
+
+    const voices =
+        window.speechSynthesis
+            .getVoices();
+
+
+    let selectedVoice =
+        null;
+
+
+    if (isTelugu) {
+
+        // Telugu voice
+        selectedVoice =
+            voices.find(
+                voice =>
+                    voice.lang
+                        .toLowerCase()
+                        .startsWith(
+                            "te"
+                        )
+            );
+
+
+    }
+
+    else {
+
+        // Indian English voice
+        selectedVoice =
+            voices.find(
+                voice =>
+                    voice.lang
+                        .toLowerCase()
+                        .startsWith(
+                            "en-in"
+                        )
+            );
+
+
+        // Any English voice fallback
+        if (!selectedVoice) {
+
+            selectedVoice =
+                voices.find(
+                    voice =>
+                        voice.lang
+                            .toLowerCase()
+                            .startsWith(
+                                "en"
+                            )
+                );
+
+        }
+
+    }
+
+
+    if (selectedVoice) {
+
+        utterance.voice =
+            selectedVoice;
+
+        console.log(
+            "J.A.R.V.I.S voice:",
+            selectedVoice.name,
+            selectedVoice.lang
+        );
+
+    }
+
+    else {
+
+        console.warn(
+            "No dedicated voice found for:",
+            language
+        );
+
+    }
+
+
+    // ---------------------------------------------
     // SPEAKING START
-    utterance.onstart = () => {
+    // ---------------------------------------------
 
-        setHudState(
-            "speaking"
-        );
+    utterance.onstart =
+        () => {
 
-    };
+            setHudState(
+                "speaking"
+            );
+
+        };
 
 
+    // ---------------------------------------------
     // SPEAKING END
-    utterance.onend = () => {
+    // ---------------------------------------------
 
-        setHudState(
-            "ready"
-        );
+    utterance.onend =
+        () => {
 
-    };
+            setHudState(
+                "ready"
+            );
+
+        };
 
 
-    // SPEAKING ERROR
-    utterance.onerror = () => {
+    // ---------------------------------------------
+    // SPEECH ERROR
+    // ---------------------------------------------
 
-        setHudState(
-            "ready"
-        );
+    utterance.onerror =
+        error => {
 
-    };
+            console.error(
+                "J.A.R.V.I.S speech error:",
+                error
+            );
+
+            setHudState(
+                "ready"
+            );
+
+        };
 
 
     window.speechSynthesis.speak(
         utterance
     );
+
 }
 
 
 // =====================================================
-// STATUS
+// LOAD AVAILABLE VOICES
 // =====================================================
 
-function setStatus(text) {
+if (
+    "speechSynthesis"
+    in window
+) {
 
-    if (coreStatus) {
+    window.speechSynthesis
+        .onvoiceschanged =
+        () => {
 
-        coreStatus.textContent =
-            text;
+            const voices =
+                window.speechSynthesis
+                    .getVoices();
 
-    }
+
+            console.log(
+                "Available voices:",
+                voices.length
+            );
+
+
+            const teluguVoice =
+                voices.find(
+                    voice =>
+                        voice.lang
+                            .toLowerCase()
+                            .startsWith(
+                                "te"
+                            )
+                );
+
+
+            if (teluguVoice) {
+
+                console.log(
+                    "Telugu voice available:",
+                    teluguVoice.name,
+                    teluguVoice.lang
+                );
+
+            }
+
+            else {
+
+                console.log(
+                    "Dedicated Telugu voice is not available in this browser."
+                );
+
+            }
+
+        };
+
 }
 
 
@@ -314,7 +605,9 @@ function setStatus(text) {
 // LOCAL COMMANDS
 // =====================================================
 
-function handleLocalCommand(command) {
+function handleLocalCommand(
+    command
+) {
 
     const text =
         command
@@ -327,16 +620,21 @@ function handleLocalCommand(command) {
     // ---------------------------------------------
 
     if (
+
         text === "hello" ||
+
         text === "hi" ||
+
         text === "hey" ||
+
         text === "హలో" ||
+
         text === "హాయ్"
+
     ) {
 
         return (
-            "Hello Boss. " +
-            "J.A.R.V.I.S is online and ready."
+            "Hello Boss. J.A.R.V.I.S is online and ready."
         );
 
     }
@@ -347,14 +645,23 @@ function handleLocalCommand(command) {
     // ---------------------------------------------
 
     if (
-        text.includes("who are you") ||
-        text.includes("neevaru") ||
-        text.includes("నువ్వెవరు")
+
+        text.includes(
+            "who are you"
+        ) ||
+
+        text.includes(
+            "neevaru"
+        ) ||
+
+        text.includes(
+            "నువ్వెవరు"
+        )
+
     ) {
 
         return (
-            "I am J.A.R.V.I.S, " +
-            "your personal artificial intelligence assistant."
+            "I am J.A.R.V.I.S, your personal artificial intelligence assistant."
         );
 
     }
@@ -365,23 +672,46 @@ function handleLocalCommand(command) {
     // ---------------------------------------------
 
     if (
+
         text === "time" ||
-        text.includes("what time") ||
-        text.includes("current time") ||
-        text.includes("సమయం")
+
+        text.includes(
+            "what time"
+        ) ||
+
+        text.includes(
+            "current time"
+        ) ||
+
+        text.includes(
+            "time now"
+        ) ||
+
+        text.includes(
+            "సమయం"
+        )
+
     ) {
 
         return (
+
             `Boss, the current time is ${
-                new Date().toLocaleTimeString(
-                    "en-IN",
-                    {
-                        hour: "numeric",
-                        minute: "2-digit",
-                        second: "2-digit"
-                    }
-                )
+                new Date()
+                    .toLocaleTimeString(
+                        "en-IN",
+                        {
+                            hour:
+                                "numeric",
+
+                            minute:
+                                "2-digit",
+
+                            second:
+                                "2-digit"
+                        }
+                    )
             }.`
+
         );
 
     }
@@ -392,102 +722,741 @@ function handleLocalCommand(command) {
     // ---------------------------------------------
 
     if (
+
         text === "date" ||
-        text.includes("today date") ||
-        text.includes("today's date") ||
-        text.includes("తేదీ")
+
+        text.includes(
+            "today date"
+        ) ||
+
+        text.includes(
+            "today's date"
+        ) ||
+
+        text.includes(
+            "what is today's date"
+        ) ||
+
+        text.includes(
+            "తేదీ"
+        )
+
     ) {
 
         return (
+
             `Boss, today is ${
-                new Date().toLocaleDateString(
-                    "en-IN",
-                    {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
-                    }
-                )
+                new Date()
+                    .toLocaleDateString(
+                        "en-IN",
+                        {
+                            weekday:
+                                "long",
+
+                            day:
+                                "numeric",
+
+                            month:
+                                "long",
+
+                            year:
+                                "numeric"
+                        }
+                    )
             }.`
+
         );
 
     }
 
+
     return null;
+
 }
 
 
 // =====================================================
-// LOCATION
+// GET GPS COORDINATES
 // =====================================================
 
-function getLocation() {
+function getCoordinates() {
 
-    return new Promise(resolve => {
+    return new Promise(
+        resolve => {
 
-        if (!navigator.geolocation) {
+            if (
+                !navigator.geolocation
+            ) {
 
-            resolve(
-                "Boss, this browser does not support location."
+                resolve({
+
+                    success:
+                        false,
+
+                    error:
+                        "This browser does not support GPS location."
+
+                });
+
+                return;
+
+            }
+
+
+            navigator.geolocation
+                .getCurrentPosition(
+
+                    position => {
+
+                        resolve({
+
+                            success:
+                                true,
+
+                            latitude:
+                                position
+                                    .coords
+                                    .latitude,
+
+                            longitude:
+                                position
+                                    .coords
+                                    .longitude,
+
+                            accuracy:
+                                position
+                                    .coords
+                                    .accuracy
+
+                        });
+
+                    },
+
+
+                    error => {
+
+                        console.error(
+                            "Location error:",
+                            error
+                        );
+
+
+                        resolve({
+
+                            success:
+                                false,
+
+                            error:
+                                "Location permission was denied or location could not be obtained."
+
+                        });
+
+                    },
+
+
+                    {
+
+                        enableHighAccuracy:
+                            true,
+
+                        timeout:
+                            15000,
+
+                        maximumAge:
+                            0
+
+                    }
+
+                );
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// REVERSE GEOCODING
+// =====================================================
+
+async function reverseGeocode(
+    latitude,
+    longitude
+) {
+
+    try {
+
+        const url =
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+
+
+        const response =
+            await fetch(
+                url
             );
 
-            return;
+
+        if (!response.ok) {
+            return null;
         }
 
 
-        navigator.geolocation.getCurrentPosition(
+        return await response.json();
 
-            position => {
+    }
 
-                const latitude =
-                    position.coords.latitude
-                        .toFixed(6);
+    catch (error) {
 
-                const longitude =
-                    position.coords.longitude
-                        .toFixed(6);
+        console.error(
+            "Reverse geocoding error:",
+            error
+        );
 
-                const accuracy =
-                    Math.round(
-                        position.coords.accuracy
-                    );
+        return null;
 
+    }
 
-                resolve(
-
-                    `Boss, your current coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy is approximately ${accuracy} meters.`
-
-                );
-
-            },
+}
 
 
-            error => {
+// =====================================================
+// DETAILED LOCATION
+// =====================================================
 
-                console.error(
-                    "Location error:",
-                    error
-                );
+async function getDetailedLocation() {
 
-                resolve(
+    const location =
+        await getCoordinates();
 
-                    "Boss, I could not access your location. Please allow location permission for J.A.R.V.I.S."
 
-                );
+    if (
+        !location.success
+    ) {
 
-            },
+        return (
 
+            `Boss, ${location.error} Please allow location permission for J.A.R.V.I.S.`
+
+        );
+
+    }
+
+
+    const latitude =
+        location.latitude
+            .toFixed(6);
+
+
+    const longitude =
+        location.longitude
+            .toFixed(6);
+
+
+    const accuracy =
+        Math.round(
+            location.accuracy
+        );
+
+
+    const address =
+        await reverseGeocode(
+
+            location.latitude,
+
+            location.longitude
+
+        );
+
+
+    if (!address) {
+
+        return (
+
+            `Boss, your coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy is approximately ${accuracy} meters.`
+
+        );
+
+    }
+
+
+    const a =
+        address.address || {};
+
+
+    const area =
+        a.suburb ||
+        a.village ||
+        a.town ||
+        a.city_district ||
+        "";
+
+
+    const city =
+        a.city ||
+        a.town ||
+        a.municipality ||
+        a.county ||
+        "";
+
+
+    const state =
+        a.state ||
+        "";
+
+
+    const country =
+        a.country ||
+        "";
+
+
+    let result =
+        "Boss, your current location is approximately ";
+
+
+    result +=
+        area
+            ? area + ", "
+            : "";
+
+
+    result +=
+        city
+            ? city + ", "
+            : "";
+
+
+    result +=
+        state
+            ? state + ", "
+            : "";
+
+
+    result +=
+        country;
+
+
+    result +=
+        ". ";
+
+
+    result +=
+        `Your coordinates are latitude ${latitude}, longitude ${longitude}. `;
+
+
+    result +=
+        `GPS accuracy is approximately ${accuracy} meters.`;
+
+
+    return result;
+
+}
+
+
+// =====================================================
+// WEATHER
+// =====================================================
+
+async function getWeather() {
+
+    const location =
+        await getCoordinates();
+
+
+    if (
+        !location.success
+    ) {
+
+        return (
+
+            `Boss, I need your location to get the weather. ${location.error}`
+
+        );
+
+    }
+
+
+    try {
+
+        const latitude =
+            location.latitude;
+
+
+        const longitude =
+            location.longitude;
+
+
+        const url =
+            `${WEATHER_API}` +
+
+            `?latitude=${latitude}` +
+
+            `&longitude=${longitude}` +
+
+            `&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m,wind_direction_10m` +
+
+            `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset` +
+
+            `&timezone=auto`;
+
+
+        const response =
+            await fetch(
+                url
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Weather API request failed."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const current =
+            data.current;
+
+
+        const daily =
+            data.daily;
+
+
+        const temperature =
+            Math.round(
+                current
+                    .temperature_2m
+            );
+
+
+        const feelsLike =
+            Math.round(
+                current
+                    .apparent_temperature
+            );
+
+
+        const humidity =
+            Math.round(
+                current
+                    .relative_humidity_2m
+            );
+
+
+        const wind =
+            Math.round(
+                current
+                    .wind_speed_10m
+            );
+
+
+        const condition =
+            getWeatherDescription(
+                current.weather_code
+            );
+
+
+        const maxTemp =
+            Math.round(
+                daily
+                    .temperature_2m_max[0]
+            );
+
+
+        const minTemp =
+            Math.round(
+                daily
+                    .temperature_2m_min[0]
+            );
+
+
+        const rainChance =
+            daily
+                .precipitation_probability_max?.[0]
+            ?? 0;
+
+
+        const sunrise =
+            formatTime(
+                daily.sunrise?.[0]
+            );
+
+
+        const sunset =
+            formatTime(
+                daily.sunset?.[0]
+            );
+
+
+        const locationName =
+            await getLocationName(
+
+                latitude,
+
+                longitude
+
+            );
+
+
+        return (
+
+            `Boss, here is the current weather` +
+
+            `${
+                locationName
+                    ? " for " +
+                      locationName
+                    : ""
+            }.\n\n` +
+
+            `Temperature: ${temperature}°C\n` +
+
+            `Feels like: ${feelsLike}°C\n` +
+
+            `Condition: ${condition}\n` +
+
+            `Humidity: ${humidity}%\n` +
+
+            `Wind: ${wind} km/h\n` +
+
+            `Today's range: ${minTemp}°C to ${maxTemp}°C\n` +
+
+            `Rain probability: ${rainChance}%\n` +
+
+            `Sunrise: ${sunrise}\n` +
+
+            `Sunset: ${sunset}`
+
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Weather error:",
+            error
+        );
+
+
+        return (
+            "Boss, I could not retrieve the current weather right now."
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// WEATHER DESCRIPTION
+// =====================================================
+
+function getWeatherDescription(
+    code
+) {
+
+    const descriptions = {
+
+        0:
+            "Clear sky",
+
+        1:
+            "Mainly clear",
+
+        2:
+            "Partly cloudy",
+
+        3:
+            "Overcast",
+
+        45:
+            "Foggy",
+
+        48:
+            "Depositing rime fog",
+
+        51:
+            "Light drizzle",
+
+        53:
+            "Moderate drizzle",
+
+        55:
+            "Dense drizzle",
+
+        56:
+            "Light freezing drizzle",
+
+        57:
+            "Dense freezing drizzle",
+
+        61:
+            "Slight rain",
+
+        63:
+            "Moderate rain",
+
+        65:
+            "Heavy rain",
+
+        66:
+            "Light freezing rain",
+
+        67:
+            "Heavy freezing rain",
+
+        71:
+            "Slight snow",
+
+        73:
+            "Moderate snow",
+
+        75:
+            "Heavy snow",
+
+        77:
+            "Snow grains",
+
+        80:
+            "Slight rain showers",
+
+        81:
+            "Moderate rain showers",
+
+        82:
+            "Violent rain showers",
+
+        85:
+            "Slight snow showers",
+
+        86:
+            "Heavy snow showers",
+
+        95:
+            "Thunderstorm",
+
+        96:
+            "Thunderstorm with slight hail",
+
+        99:
+            "Thunderstorm with heavy hail"
+
+    };
+
+
+    return (
+
+        descriptions[code] ||
+        "Unknown weather condition"
+
+    );
+
+}
+
+
+// =====================================================
+// FORMAT TIME
+// =====================================================
+
+function formatTime(
+    value
+) {
+
+    if (!value) {
+        return "Unknown";
+    }
+
+
+    try {
+
+        return new Date(
+            value
+        ).toLocaleTimeString(
+
+            "en-IN",
 
             {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+
+                hour:
+                    "numeric",
+
+                minute:
+                    "2-digit"
+
             }
 
         );
 
-    });
+    }
+
+    catch {
+
+        return value;
+
+    }
+
+}
+
+
+// =====================================================
+// LOCATION NAME
+// =====================================================
+
+async function getLocationName(
+    latitude,
+    longitude
+) {
+
+    try {
+
+        const data =
+            await reverseGeocode(
+
+                latitude,
+
+                longitude
+
+            );
+
+
+        if (!data) {
+            return "";
+        }
+
+
+        const a =
+            data.address || {};
+
+
+        return (
+
+            a.city ||
+
+            a.town ||
+
+            a.village ||
+
+            a.municipality ||
+
+            a.county ||
+
+            ""
+
+        );
+
+    }
+
+    catch {
+
+        return "";
+
+    }
+
 }
 
 
@@ -495,12 +1464,15 @@ function getLocation() {
 // OPEN WEBSITE
 // =====================================================
 
-function openWebsite(url) {
+function openWebsite(
+    url
+) {
 
     window.open(
         url,
         "_blank"
     );
+
 }
 
 
@@ -508,7 +1480,9 @@ function openWebsite(url) {
 // SPECIAL COMMANDS
 // =====================================================
 
-async function checkSpecialCommand(command) {
+async function checkSpecialCommand(
+    command
+) {
 
     const text =
         command
@@ -521,14 +1495,75 @@ async function checkSpecialCommand(command) {
     // ---------------------------------------------
 
     if (
-        text.includes("my location") ||
-        text.includes("where am i") ||
-        text.includes("నా లొకేషన్") ||
-        text.includes("నా location") ||
-        text.includes("నేను ఎక్కడ")
+
+        text.includes(
+            "my location"
+        ) ||
+
+        text.includes(
+            "where am i"
+        ) ||
+
+        text.includes(
+            "current location"
+        ) ||
+
+        text.includes(
+            "నా లొకేషన్"
+        ) ||
+
+        text.includes(
+            "నా location"
+        ) ||
+
+        text.includes(
+            "నేను ఎక్కడ"
+        ) ||
+
+        text.includes(
+            "location cheppu"
+        )
+
     ) {
 
-        return await getLocation();
+        return await getDetailedLocation();
+
+    }
+
+
+    // ---------------------------------------------
+    // WEATHER
+    // ---------------------------------------------
+
+    if (
+
+        text.includes(
+            "weather"
+        ) ||
+
+        text.includes(
+            "temperature"
+        ) ||
+
+        text.includes(
+            "weather cheppu"
+        ) ||
+
+        text.includes(
+            "weather ela undi"
+        ) ||
+
+        text.includes(
+            "వాతావరణం"
+        ) ||
+
+        text.includes(
+            "వెదర్"
+        )
+
+    ) {
+
+        return await getWeather();
 
     }
 
@@ -538,12 +1573,14 @@ async function checkSpecialCommand(command) {
     // ---------------------------------------------
 
     if (
-        text === "open google"
+        text ===
+        "open google"
     ) {
 
         openWebsite(
             "https://www.google.com"
         );
+
 
         return (
             "Opening Google, Boss."
@@ -557,12 +1594,14 @@ async function checkSpecialCommand(command) {
     // ---------------------------------------------
 
     if (
-        text === "open youtube"
+        text ===
+        "open youtube"
     ) {
 
         openWebsite(
             "https://www.youtube.com"
         );
+
 
         return (
             "Opening YouTube, Boss."
@@ -594,9 +1633,13 @@ async function checkSpecialCommand(command) {
             openWebsite(
 
                 "https://www.google.com/search?q=" +
-                encodeURIComponent(query)
+
+                encodeURIComponent(
+                    query
+                )
 
             );
+
 
             return (
                 `Searching Google for ${query}.`
@@ -630,9 +1673,13 @@ async function checkSpecialCommand(command) {
             openWebsite(
 
                 "https://www.youtube.com/results?search_query=" +
-                encodeURIComponent(query)
+
+                encodeURIComponent(
+                    query
+                )
 
             );
+
 
             return (
                 `Searching YouTube for ${query}.`
@@ -644,11 +1691,12 @@ async function checkSpecialCommand(command) {
 
 
     return null;
+
 }
 
 
 // =====================================================
-// SEND MESSAGE TO GEMINI
+// GEMINI AI
 // =====================================================
 
 async function askGemini(
@@ -685,7 +1733,8 @@ async function askGemini(
 
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -721,9 +1770,12 @@ async function askGemini(
                 data
             );
 
+
             throw new Error(
+
                 data.error ||
                 "Gemini request failed."
+
             );
 
         }
@@ -751,8 +1803,9 @@ async function askGemini(
 
         return data.reply;
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
         console.error(
             "Gemini connection error:",
@@ -772,6 +1825,7 @@ async function askGemini(
         );
 
     }
+
 }
 
 
@@ -793,6 +1847,7 @@ async function processCommand(
 
 
     // USER MESSAGE
+
     addMessage(
         originalCommand,
         "user"
@@ -800,23 +1855,28 @@ async function processCommand(
 
 
     // ---------------------------------------------
-    // CLEAR MEMORY COMMAND
+    // CLEAR MEMORY
     // ---------------------------------------------
 
     if (
+
         originalCommand
             .toLowerCase()
             .trim() ===
         "clear memory"
+
     ) {
 
         memory = [];
+
 
         localStorage.removeItem(
             MEMORY_KEY
         );
 
-        chat.innerHTML = "";
+
+        chat.innerHTML =
+            "";
 
 
         const response =
@@ -833,7 +1893,9 @@ async function processCommand(
             response
         );
 
+
         return;
+
     }
 
 
@@ -854,15 +1916,19 @@ async function processCommand(
             "jarvis"
         );
 
+
         speak(
             localResponse
         );
+
 
         setHudState(
             "ready"
         );
 
+
         return;
+
     }
 
 
@@ -883,15 +1949,19 @@ async function processCommand(
             "jarvis"
         );
 
+
         speak(
             specialResponse
         );
+
 
         setHudState(
             "ready"
         );
 
+
         return;
+
     }
 
 
@@ -914,6 +1984,7 @@ async function processCommand(
     speak(
         aiResponse
     );
+
 }
 
 
@@ -923,6 +1994,7 @@ async function processCommand(
 
 send.addEventListener(
     "click",
+
     async () => {
 
         const command =
@@ -934,12 +2006,16 @@ send.addEventListener(
         }
 
 
-        msg.value = "";
+        msg.value =
+            "";
 
 
-        send.disabled = true;
+        send.disabled =
+            true;
 
-        micBtn.disabled = true;
+
+        micBtn.disabled =
+            true;
 
 
         try {
@@ -948,19 +2024,24 @@ send.addEventListener(
                 command
             );
 
-        } finally {
+        }
+
+        finally {
 
             send.disabled =
                 false;
 
+
             micBtn.disabled =
                 false;
+
 
             msg.focus();
 
         }
 
     }
+
 );
 
 
@@ -970,6 +2051,7 @@ send.addEventListener(
 
 msg.addEventListener(
     "keydown",
+
     event => {
 
         if (
@@ -984,11 +2066,12 @@ msg.addEventListener(
         }
 
     }
+
 );
 
 
 // =====================================================
-// VOICE RECOGNITION
+// SPEECH RECOGNITION
 // =====================================================
 
 const SpeechRecognition =
@@ -996,9 +2079,12 @@ const SpeechRecognition =
     window.webkitSpeechRecognition;
 
 
-let recognition = null;
+let recognition =
+    null;
 
-let isListening = false;
+
+let isListening =
+    false;
 
 
 if (SpeechRecognition) {
@@ -1023,22 +2109,23 @@ if (SpeechRecognition) {
     // LISTENING START
     // ---------------------------------------------
 
-    recognition.onstart = () => {
+    recognition.onstart =
+        () => {
 
-        isListening =
-            true;
-
-
-        micBtn.classList.add(
-            "active"
-        );
+            isListening =
+                true;
 
 
-        setHudState(
-            "listening"
-        );
+            micBtn.classList.add(
+                "active"
+            );
 
-    };
+
+            setHudState(
+                "listening"
+            );
+
+        };
 
 
     // ---------------------------------------------
@@ -1112,9 +2199,13 @@ if (SpeechRecognition) {
 
 
             if (
-                document.body.classList.contains(
-                    "listening"
-                )
+
+                document.body
+                    .classList
+                    .contains(
+                        "listening"
+                    )
+
             ) {
 
                 setHudState(
@@ -1141,7 +2232,8 @@ async function processVoiceCommand(
     }
 
 
-    msg.value = "";
+    msg.value =
+        "";
 
 
     send.disabled =
@@ -1158,7 +2250,9 @@ async function processVoiceCommand(
             transcript
         );
 
-    } finally {
+    }
+
+    finally {
 
         send.disabled =
             false;
@@ -1168,6 +2262,7 @@ async function processVoiceCommand(
             false;
 
     }
+
 }
 
 
@@ -1177,6 +2272,7 @@ async function processVoiceCommand(
 
 micBtn.addEventListener(
     "click",
+
     () => {
 
         if (!recognition) {
@@ -1197,6 +2293,7 @@ micBtn.addEventListener(
 
 
             return;
+
         }
 
 
@@ -1205,6 +2302,7 @@ micBtn.addEventListener(
             recognition.stop();
 
             return;
+
         }
 
 
@@ -1217,7 +2315,9 @@ micBtn.addEventListener(
 
             recognition.start();
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(
                 "Microphone start error:",
@@ -1227,6 +2327,7 @@ micBtn.addEventListener(
         }
 
     }
+
 );
 
 
@@ -1236,16 +2337,19 @@ micBtn.addEventListener(
 
 camBtn.addEventListener(
     "click",
+
     () => {
 
         imgInput.click();
 
     }
+
 );
 
 
 imgInput.addEventListener(
     "change",
+
     () => {
 
         const file =
@@ -1276,15 +2380,17 @@ imgInput.addEventListener(
             "";
 
     }
+
 );
 
 
 // =====================================================
-// CLEAR MEMORY BUTTON
+// CLEAR MEMORY
 // =====================================================
 
 clearBtn.addEventListener(
     "click",
+
     () => {
 
         memory = [];
@@ -1314,6 +2420,7 @@ clearBtn.addEventListener(
         );
 
     }
+
 );
 
 
@@ -1322,6 +2429,7 @@ clearBtn.addEventListener(
 // =====================================================
 
 loadMemory();
+
 
 setHudState(
     "ready"
@@ -1338,6 +2446,18 @@ console.log(
 
 console.log(
     "Gemini + Memory + Voice + HUD"
+);
+
+console.log(
+    "Telugu + English Voice"
+);
+
+console.log(
+    "Weather + Location + Time + Date"
+);
+
+console.log(
+    "Google + YouTube Commands"
 );
 
 console.log(
