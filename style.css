@@ -842,3 +842,402 @@ body::before {
         text-overflow: ellipsis;
     }
 }
+/* ============================================================
+   J.A.R.V.I.S — MOBILE OPTIMIZATION
+   Samsung A56 / Android Chrome
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    body {
+        min-height: 100dvh;
+    }
+
+    .jarvis {
+        position: relative;
+        width: 100%;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+
+    /* ========================================================
+       TOP HUD
+       ======================================================== */
+
+    .top-hud {
+        position: absolute;
+        top: 10px;
+        left: 14px;
+        right: 14px;
+
+        height: 55px;
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        z-index: 20;
+    }
+
+    .system-name {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .small-text {
+        font-size: 7px;
+        letter-spacing: 3px;
+    }
+
+    .main-text {
+        font-size: 20px;
+        letter-spacing: 5px;
+    }
+
+    .system-status {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+        margin-top: 7px;
+    }
+
+    .status-light {
+        width: 6px;
+        height: 6px;
+    }
+
+
+    /* ========================================================
+       MAIN HUD AREA
+       ======================================================== */
+
+    .hud-area {
+        position: absolute;
+
+        top: 70px;
+        left: 0;
+        right: 0;
+
+        height: 55%;
+
+        display: block;
+
+        margin: 0;
+        padding: 0;
+
+        z-index: 5;
+    }
+
+
+    /* ========================================================
+       LEFT SYSTEM PANEL
+       ======================================================== */
+
+    .left-panel {
+        position: absolute;
+
+        left: 10px;
+        top: 47%;
+
+        width: 135px;
+
+        padding: 12px 10px;
+
+        transform: translateY(-50%);
+
+        z-index: 10;
+    }
+
+
+    /* ========================================================
+       RIGHT DIAGNOSTICS PANEL
+       ======================================================== */
+
+    .right-panel {
+        position: absolute;
+
+        right: 10px;
+        top: 47%;
+
+        width: 135px;
+
+        padding: 12px 10px;
+
+        transform: translateY(-50%);
+
+        z-index: 10;
+    }
+
+
+    .panel-title {
+        font-size: 8px;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+
+    .data-line {
+        font-size: 7px;
+        margin-bottom: 9px;
+        letter-spacing: 0.5px;
+    }
+
+
+    /* ========================================================
+       CENTRAL JARVIS CORE
+       ======================================================== */
+
+    .jarvis-core {
+        position: absolute;
+
+        left: 50%;
+        top: 47%;
+
+        width: 190px;
+        height: 190px;
+
+        transform: translate(-50%, -50%);
+
+        z-index: 8;
+    }
+
+    .outer-ring.ring-one {
+        width: 190px;
+        height: 190px;
+    }
+
+    .outer-ring.ring-two {
+        width: 155px;
+        height: 155px;
+    }
+
+    .outer-ring.ring-three {
+        width: 125px;
+        height: 125px;
+    }
+
+    .energy-ring {
+        width: 105px;
+        height: 105px;
+    }
+
+    .core {
+        width: 70px;
+        height: 70px;
+    }
+
+    .core-inner {
+        width: 48px;
+        height: 48px;
+    }
+
+    .core-text {
+        font-size: 28px;
+    }
+
+
+    /* ========================================================
+       MESSAGE AREA
+       ======================================================== */
+
+    .message-area {
+        position: absolute;
+
+        left: 20px;
+        right: 20px;
+
+        bottom: 145px;
+
+        margin: 0;
+
+        text-align: center;
+
+        z-index: 20;
+    }
+
+    #jarvisMessage {
+        font-size: 11px;
+        letter-spacing: 3px;
+        line-height: 1.5;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-sub {
+        font-size: 6px;
+        letter-spacing: 1.5px;
+        margin-top: 5px;
+    }
+
+
+    /* ========================================================
+       VOICE BUTTON
+       ======================================================== */
+
+    .voice-section {
+        position: absolute;
+
+        left: 50%;
+        bottom: 78px;
+
+        transform: translateX(-50%);
+
+        width: auto;
+        margin: 0;
+
+        z-index: 30;
+    }
+
+    .voice-button {
+        min-width: 210px;
+
+        height: 46px;
+
+        padding: 0 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        font-size: 9px;
+        letter-spacing: 2px;
+
+        border-radius: 25px;
+
+        cursor: pointer;
+
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mic-icon {
+        font-size: 17px;
+    }
+
+    .voice-text {
+        font-size: 9px;
+    }
+
+    .voice-button.active {
+        animation: voiceButtonPulse 1s infinite;
+    }
+
+    @keyframes voiceButtonPulse {
+
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(0, 220, 255, 0.4);
+        }
+
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 220, 255, 0.9);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(0, 220, 255, 0.4);
+        }
+
+    }
+
+
+    /* ========================================================
+       BOTTOM HUD
+       ======================================================== */
+
+    .bottom-hud {
+        position: absolute;
+
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+
+        height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        z-index: 20;
+    }
+
+    .bottom-hud > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .bottom-label {
+        font-size: 6px;
+        letter-spacing: 1.5px;
+    }
+
+    #time,
+    #date,
+    #location {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .left-panel,
+    .right-panel {
+        width: 120px;
+        padding: 9px 7px;
+    }
+
+    .jarvis-core {
+        width: 165px;
+        height: 165px;
+    }
+
+    .outer-ring.ring-one {
+        width: 165px;
+        height: 165px;
+    }
+
+    .outer-ring.ring-two {
+        width: 135px;
+        height: 135px;
+    }
+
+    .outer-ring.ring-three {
+        width: 110px;
+        height: 110px;
+    }
+
+    .voice-button {
+        min-width: 190px;
+        height: 44px;
+    }
+
+    .message-area {
+        bottom: 140px;
+    }
+
+    .voice-section {
+        bottom: 72px;
+    }
+
+}
