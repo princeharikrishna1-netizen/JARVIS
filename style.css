@@ -1241,3 +1241,124 @@ body::before {
     }
 
 }
+/* ============================================================
+   JARVIS MOBILE - FORCE VOICE BUTTON VISIBILITY
+   ============================================================ */
+
+@media screen and (max-width: 600px) {
+
+    html,
+    body {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .jarvis {
+        width: 100% !important;
+        height: 100dvh !important;
+        min-height: 100dvh !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    /* VOICE SECTION */
+    .voice-section {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        position: fixed !important;
+
+        left: 50% !important;
+        bottom: 70px !important;
+
+        width: auto !important;
+        height: auto !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        transform: translateX(-50%) !important;
+
+        z-index: 9999 !important;
+    }
+
+    /* VOICE BUTTON */
+    .voice-button {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        position: relative !important;
+
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+
+        height: 50px !important;
+        min-height: 50px !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 10px !important;
+
+        margin: 0 !important;
+        padding: 0 15px !important;
+
+        border-radius: 30px !important;
+
+        z-index: 10000 !important;
+
+        cursor: pointer !important;
+
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+    .mic-icon {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        font-size: 18px !important;
+    }
+
+    .voice-text {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        font-size: 9px !important;
+        white-space: nowrap !important;
+    }
+
+    /* MESSAGE */
+    .message-area {
+        position: fixed !important;
+
+        left: 20px !important;
+        right: 20px !important;
+        bottom: 135px !important;
+
+        margin: 0 !important;
+
+        z-index: 9000 !important;
+
+        text-align: center !important;
+    }
+
+    /* BOTTOM HUD */
+    .bottom-hud {
+        position: fixed !important;
+
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+
+        z-index: 8000 !important;
+    }
+}
