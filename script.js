@@ -1,6 +1,6 @@
 // =====================================================
 // J.A.R.V.I.S - AI CORE
-// Gemini + Cloudflare Worker + Voice + Memory
+// Gemini + Cloudflare + Memory + Voice + HUD
 // =====================================================
 
 // =====================================================
@@ -8,7 +8,7 @@
 // =====================================================
 
 const JARVIS_API =
-    "https://jarvis.princeharikrishna1.workers.dev/api/chat";
+    "https://jarvis.princeharikrishna1-netizen.workers.dev/api/chat";
 
 
 // =====================================================
@@ -46,6 +46,39 @@ try {
 
 
 // =====================================================
+// HUD STATE
+// =====================================================
+
+function setHudState(state = "ready") {
+
+    document.body.classList.remove(
+        "thinking",
+        "listening",
+        "speaking"
+    );
+
+    if (state === "thinking") {
+        document.body.classList.add("thinking");
+        setStatus("THINKING...");
+    }
+
+    else if (state === "listening") {
+        document.body.classList.add("listening");
+        setStatus("LISTENING...");
+    }
+
+    else if (state === "speaking") {
+        document.body.classList.add("speaking");
+        setStatus("SPEAKING...");
+    }
+
+    else {
+        setStatus("SYSTEM READY");
+    }
+}
+
+
+// =====================================================
 // SAVE MEMORY
 // =====================================================
 
@@ -55,15 +88,19 @@ function saveMemory() {
 
         localStorage.setItem(
             MEMORY_KEY,
-            JSON.stringify(memory.slice(-30))
+            JSON.stringify(
+                memory.slice(-30)
+            )
         );
 
     } catch (error) {
 
-        console.error("Memory save error:", error);
+        console.error(
+            "Memory save error:",
+            error
+        );
 
     }
-
 }
 
 
@@ -77,42 +114,43 @@ function addMessage(
     save = true
 ) {
 
-    if (!text) return;
+    if (!text) {
+        return;
+    }
 
-
-    const message = document.createElement("div");
+    const message =
+        document.createElement("div");
 
     message.className =
         `message ${sender}`;
 
+    const label =
+        document.createElement("div");
 
-    const label = document.createElement("div");
-
-    label.className = "message-label";
+    label.className =
+        "message-label";
 
     label.textContent =
         sender === "user"
             ? "BOSS"
             : "J.A.R.V.I.S";
 
+    const content =
+        document.createElement("div");
 
-    const content = document.createElement("div");
+    content.className =
+        "message-content";
 
-    content.className = "message-content";
-
-    content.textContent = text;
-
+    content.textContent =
+        text;
 
     message.appendChild(label);
-
     message.appendChild(content);
 
     chat.appendChild(message);
 
-
     chat.scrollTop =
         chat.scrollHeight;
-
 
     if (save) {
 
@@ -130,11 +168,8 @@ function addMessage(
 
         });
 
-
         saveMemory();
-
     }
-
 }
 
 
@@ -145,25 +180,29 @@ function addMessage(
 function loadMemory() {
 
     if (!Array.isArray(memory)) {
+
         memory = [];
+
         return;
     }
-
 
     memory
         .slice(-20)
         .forEach(item => {
 
             addMessage(
+
                 item.text,
+
                 item.role === "user"
                     ? "user"
                     : "jarvis",
+
                 false
+
             );
 
         });
-
 }
 
 
@@ -173,59 +212,86 @@ function loadMemory() {
 
 function speak(text) {
 
-    if (
-        !("speechSynthesis" in window)
-    ) {
+    if (!("speechSynthesis" in window)) {
         return;
     }
 
-
     window.speechSynthesis.cancel();
-
 
     const cleanText =
         text
-            .replace(
-                /[*_#`]/g,
-                ""
-            )
+            .replace(/[*_#`]/g, "")
             .trim();
 
-
-    if (!cleanText) return;
-
+    if (!cleanText) {
+        return;
+    }
 
     const utterance =
         new SpeechSynthesisUtterance(
             cleanText
         );
 
-
-    // Telugu / English support
+    // Telugu / English
     if (
-        /[\u0C00-\u0C7F]/.test(cleanText)
+        /[\u0C00-\u0C7F]/.test(
+            cleanText
+        )
     ) {
 
-        utterance.lang = "te-IN";
+        utterance.lang =
+            "te-IN";
 
     } else {
 
-        utterance.lang = "en-IN";
+        utterance.lang =
+            "en-IN";
 
     }
 
+    utterance.rate =
+        0.95;
 
-    utterance.rate = 0.95;
+    utterance.pitch =
+        1.0;
 
-    utterance.pitch = 1.0;
+    utterance.volume =
+        1.0;
 
-    utterance.volume = 1.0;
+
+    // SPEAKING START
+    utterance.onstart = () => {
+
+        setHudState(
+            "speaking"
+        );
+
+    };
+
+
+    // SPEAKING END
+    utterance.onend = () => {
+
+        setHudState(
+            "ready"
+        );
+
+    };
+
+
+    // SPEAKING ERROR
+    utterance.onerror = () => {
+
+        setHudState(
+            "ready"
+        );
+
+    };
 
 
     window.speechSynthesis.speak(
         utterance
     );
-
 }
 
 
@@ -241,7 +307,6 @@ function setStatus(text) {
             text;
 
     }
-
 }
 
 
@@ -257,9 +322,9 @@ function handleLocalCommand(command) {
             .trim();
 
 
-    // -----------------------------------------------
-    // GREETING
-    // -----------------------------------------------
+    // ---------------------------------------------
+    // HELLO
+    // ---------------------------------------------
 
     if (
         text === "hello" ||
@@ -269,14 +334,17 @@ function handleLocalCommand(command) {
         text === "హాయ్"
     ) {
 
-        return "Hello Boss. J.A.R.V.I.S is online and ready.";
+        return (
+            "Hello Boss. " +
+            "J.A.R.V.I.S is online and ready."
+        );
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // WHO ARE YOU
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text.includes("who are you") ||
@@ -284,58 +352,69 @@ function handleLocalCommand(command) {
         text.includes("నువ్వెవరు")
     ) {
 
-        return "I am J.A.R.V.I.S, your personal artificial intelligence assistant.";
+        return (
+            "I am J.A.R.V.I.S, " +
+            "your personal artificial intelligence assistant."
+        );
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // TIME
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text === "time" ||
         text.includes("what time") ||
+        text.includes("current time") ||
         text.includes("సమయం")
     ) {
 
-        return `Boss, the current time is ${new Date().toLocaleTimeString(
-            "en-IN",
-            {
-                hour: "numeric",
-                minute: "2-digit",
-                second: "2-digit"
-            }
-        )}.`;
+        return (
+            `Boss, the current time is ${
+                new Date().toLocaleTimeString(
+                    "en-IN",
+                    {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    }
+                )
+            }.`
+        );
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // DATE
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text === "date" ||
         text.includes("today date") ||
+        text.includes("today's date") ||
         text.includes("తేదీ")
     ) {
 
-        return `Boss, today is ${new Date().toLocaleDateString(
-            "en-IN",
-            {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-            }
-        )}.`;
+        return (
+            `Boss, today is ${
+                new Date().toLocaleDateString(
+                    "en-IN",
+                    {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
+                )
+            }.`
+        );
 
     }
 
-
     return null;
-
 }
 
 
@@ -345,78 +424,70 @@ function handleLocalCommand(command) {
 
 function getLocation() {
 
-    return new Promise(
-        resolve => {
+    return new Promise(resolve => {
 
-            if (
-                !navigator.geolocation
-            ) {
+        if (!navigator.geolocation) {
 
-                resolve(
-                    "Boss, this browser does not support location."
-                );
-
-                return;
-
-            }
-
-
-            navigator.geolocation.getCurrentPosition(
-
-                position => {
-
-                    const latitude =
-                        position.coords.latitude
-                            .toFixed(6);
-
-                    const longitude =
-                        position.coords.longitude
-                            .toFixed(6);
-
-                    const accuracy =
-                        Math.round(
-                            position.coords.accuracy
-                        );
-
-
-                    resolve(
-
-                        `Boss, your current coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy is approximately ${accuracy} meters.`
-
-                    );
-
-                },
-
-
-                error => {
-
-                    console.error(
-                        "Location error:",
-                        error
-                    );
-
-
-                    resolve(
-                        "Boss, I could not access your location. Please allow location permission for J.A.R.V.I.S."
-                    );
-
-                },
-
-                {
-
-                    enableHighAccuracy: true,
-
-                    timeout: 10000,
-
-                    maximumAge: 0
-
-                }
-
+            resolve(
+                "Boss, this browser does not support location."
             );
 
+            return;
         }
-    );
 
+
+        navigator.geolocation.getCurrentPosition(
+
+            position => {
+
+                const latitude =
+                    position.coords.latitude
+                        .toFixed(6);
+
+                const longitude =
+                    position.coords.longitude
+                        .toFixed(6);
+
+                const accuracy =
+                    Math.round(
+                        position.coords.accuracy
+                    );
+
+
+                resolve(
+
+                    `Boss, your current coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy is approximately ${accuracy} meters.`
+
+                );
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "Location error:",
+                    error
+                );
+
+                resolve(
+
+                    "Boss, I could not access your location. Please allow location permission for J.A.R.V.I.S."
+
+                );
+
+            },
+
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+
+        );
+
+    });
 }
 
 
@@ -430,7 +501,6 @@ function openWebsite(url) {
         url,
         "_blank"
     );
-
 }
 
 
@@ -438,9 +508,7 @@ function openWebsite(url) {
 // SPECIAL COMMANDS
 // =====================================================
 
-async function checkSpecialCommand(
-    command
-) {
+async function checkSpecialCommand(command) {
 
     const text =
         command
@@ -448,14 +516,15 @@ async function checkSpecialCommand(
             .trim();
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // LOCATION
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text.includes("my location") ||
         text.includes("where am i") ||
         text.includes("నా లొకేషన్") ||
+        text.includes("నా location") ||
         text.includes("నేను ఎక్కడ")
     ) {
 
@@ -464,9 +533,9 @@ async function checkSpecialCommand(
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // GOOGLE
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text === "open google"
@@ -476,14 +545,16 @@ async function checkSpecialCommand(
             "https://www.google.com"
         );
 
-        return "Opening Google, Boss.";
+        return (
+            "Opening Google, Boss."
+        );
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // YOUTUBE
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
         text === "open youtube"
@@ -493,63 +564,79 @@ async function checkSpecialCommand(
             "https://www.youtube.com"
         );
 
-        return "Opening YouTube, Boss.";
+        return (
+            "Opening YouTube, Boss."
+        );
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // GOOGLE SEARCH
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
-        text.startsWith("google search ")
+        text.startsWith(
+            "google search "
+        )
     ) {
 
         const query =
-            command.substring(
-                "google search ".length
-            ).trim();
+            command
+                .substring(
+                    "google search ".length
+                )
+                .trim();
 
 
         if (query) {
 
             openWebsite(
+
                 "https://www.google.com/search?q=" +
                 encodeURIComponent(query)
+
             );
 
-
-            return `Searching Google for ${query}.`;
+            return (
+                `Searching Google for ${query}.`
+            );
 
         }
 
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // YOUTUBE SEARCH
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     if (
-        text.startsWith("youtube search ")
+        text.startsWith(
+            "youtube search "
+        )
     ) {
 
         const query =
-            command.substring(
-                "youtube search ".length
-            ).trim();
+            command
+                .substring(
+                    "youtube search ".length
+                )
+                .trim();
 
 
         if (query) {
 
             openWebsite(
+
                 "https://www.youtube.com/results?search_query=" +
                 encodeURIComponent(query)
+
             );
 
-
-            return `Searching YouTube for ${query}.`;
+            return (
+                `Searching YouTube for ${query}.`
+            );
 
         }
 
@@ -557,7 +644,6 @@ async function checkSpecialCommand(
 
 
     return null;
-
 }
 
 
@@ -569,12 +655,11 @@ async function askGemini(
     userMessage
 ) {
 
-    setStatus(
-        "THINKING..."
+    setHudState(
+        "thinking"
     );
 
 
-    // Send recent conversation only
     const history =
         memory
             .slice(-12)
@@ -595,7 +680,9 @@ async function askGemini(
 
         const response =
             await fetch(
+
                 JARVIS_API,
+
                 {
 
                     method: "POST",
@@ -607,17 +694,19 @@ async function askGemini(
 
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        message:
-                            userMessage,
+                            message:
+                                userMessage,
 
-                        history:
-                            history
+                            history:
+                                history
 
-                    })
+                        })
 
                 }
+
             );
 
 
@@ -631,7 +720,6 @@ async function askGemini(
                 "JARVIS API Error:",
                 data
             );
-
 
             throw new Error(
                 data.error ||
@@ -647,23 +735,24 @@ async function askGemini(
         ) {
 
             throw new Error(
+
                 data.error ||
                 "No response from Gemini."
+
             );
 
         }
 
 
-        setStatus(
-            "SYSTEM READY"
+        setHudState(
+            "ready"
         );
 
 
         return data.reply;
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Gemini connection error:",
@@ -671,17 +760,18 @@ async function askGemini(
         );
 
 
-        setStatus(
-            "CONNECTION ERROR"
+        setHudState(
+            "ready"
         );
 
 
         return (
+
             "Boss, I could not connect to my AI brain right now. Please check the Cloudflare Worker connection."
+
         );
 
     }
-
 }
 
 
@@ -702,19 +792,16 @@ async function processCommand(
     }
 
 
-    // -----------------------------------------------
-    // SHOW USER MESSAGE
-    // -----------------------------------------------
-
+    // USER MESSAGE
     addMessage(
         originalCommand,
         "user"
     );
 
 
-    // -----------------------------------------------
-    // CLEAR MEMORY
-    // -----------------------------------------------
+    // ---------------------------------------------
+    // CLEAR MEMORY COMMAND
+    // ---------------------------------------------
 
     if (
         originalCommand
@@ -731,24 +818,28 @@ async function processCommand(
 
         chat.innerHTML = "";
 
+
         const response =
-            "Memory cleared, Boss. J.A.R.V.I.S is ready.";
+            "Memory cleared, Boss.";
+
 
         addMessage(
             response,
             "jarvis"
         );
 
-        speak(response);
+
+        speak(
+            response
+        );
 
         return;
-
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // LOCAL COMMAND
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     const localResponse =
         handleLocalCommand(
@@ -767,18 +858,17 @@ async function processCommand(
             localResponse
         );
 
-        setStatus(
-            "SYSTEM READY"
+        setHudState(
+            "ready"
         );
 
         return;
-
     }
 
 
-    // -----------------------------------------------
+    // ---------------------------------------------
     // SPECIAL COMMAND
-    // -----------------------------------------------
+    // ---------------------------------------------
 
     const specialResponse =
         await checkSpecialCommand(
@@ -797,18 +887,17 @@ async function processCommand(
             specialResponse
         );
 
-        setStatus(
-            "SYSTEM READY"
+        setHudState(
+            "ready"
         );
 
         return;
-
     }
 
 
-    // -----------------------------------------------
-    // GEMINI AI
-    // -----------------------------------------------
+    // ---------------------------------------------
+    // GEMINI
+    // ---------------------------------------------
 
     const aiResponse =
         await askGemini(
@@ -825,7 +914,6 @@ async function processCommand(
     speak(
         aiResponse
     );
-
 }
 
 
@@ -848,6 +936,7 @@ send.addEventListener(
 
         msg.value = "";
 
+
         send.disabled = true;
 
         micBtn.disabled = true;
@@ -859,13 +948,13 @@ send.addEventListener(
                 command
             );
 
-        }
+        } finally {
 
-        finally {
+            send.disabled =
+                false;
 
-            send.disabled = false;
-
-            micBtn.disabled = false;
+            micBtn.disabled =
+                false;
 
             msg.focus();
 
@@ -884,7 +973,8 @@ msg.addEventListener(
     event => {
 
         if (
-            event.key === "Enter"
+            event.key ===
+            "Enter"
         ) {
 
             event.preventDefault();
@@ -917,92 +1007,123 @@ if (SpeechRecognition) {
         new SpeechRecognition();
 
 
-    recognition.continuous = false;
+    recognition.continuous =
+        false;
 
-    recognition.interimResults = false;
 
-    recognition.lang = "en-IN";
+    recognition.interimResults =
+        false;
 
+
+    recognition.lang =
+        "en-IN";
+
+
+    // ---------------------------------------------
+    // LISTENING START
+    // ---------------------------------------------
 
     recognition.onstart = () => {
 
-        isListening = true;
+        isListening =
+            true;
+
 
         micBtn.classList.add(
             "active"
         );
 
-        setStatus(
-            "LISTENING..."
+
+        setHudState(
+            "listening"
         );
 
     };
 
 
-    recognition.onresult = event => {
+    // ---------------------------------------------
+    // VOICE RESULT
+    // ---------------------------------------------
 
-        const transcript =
-            event
-                .results[0][0]
-                .transcript
-                .trim();
+    recognition.onresult =
+        event => {
 
-
-        msg.value =
-            transcript;
-
-
-        processVoiceCommand(
-            transcript
-        );
-
-    };
+            const transcript =
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
 
 
-    recognition.onerror = event => {
-
-        console.error(
-            "Speech recognition error:",
-            event.error
-        );
+            msg.value =
+                transcript;
 
 
-        isListening = false;
-
-        micBtn.classList.remove(
-            "active"
-        );
-
-
-        setStatus(
-            "SYSTEM READY"
-        );
-
-    };
-
-
-    recognition.onend = () => {
-
-        isListening = false;
-
-        micBtn.classList.remove(
-            "active"
-        );
-
-
-        if (
-            coreStatus &&
-            coreStatus.textContent ===
-            "LISTENING..."
-        ) {
-
-            setStatus(
-                "SYSTEM READY"
+            processVoiceCommand(
+                transcript
             );
 
-        }
+        };
 
-    };
+
+    // ---------------------------------------------
+    // VOICE ERROR
+    // ---------------------------------------------
+
+    recognition.onerror =
+        event => {
+
+            console.error(
+                "Speech recognition error:",
+                event.error
+            );
+
+
+            isListening =
+                false;
+
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+
+            setHudState(
+                "ready"
+            );
+
+        };
+
+
+    // ---------------------------------------------
+    // LISTENING END
+    // ---------------------------------------------
+
+    recognition.onend =
+        () => {
+
+            isListening =
+                false;
+
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+
+            if (
+                document.body.classList.contains(
+                    "listening"
+                )
+            ) {
+
+                setHudState(
+                    "ready"
+                );
+
+            }
+
+        };
 
 }
 
@@ -1023,9 +1144,12 @@ async function processVoiceCommand(
     msg.value = "";
 
 
-    send.disabled = true;
+    send.disabled =
+        true;
 
-    micBtn.disabled = true;
+
+    micBtn.disabled =
+        true;
 
 
     try {
@@ -1034,16 +1158,16 @@ async function processVoiceCommand(
             transcript
         );
 
+    } finally {
+
+        send.disabled =
+            false;
+
+
+        micBtn.disabled =
+            false;
+
     }
-
-    finally {
-
-        send.disabled = false;
-
-        micBtn.disabled = false;
-
-    }
-
 }
 
 
@@ -1060,15 +1184,19 @@ micBtn.addEventListener(
             const response =
                 "Boss, voice recognition is not supported by this browser.";
 
+
             addMessage(
                 response,
                 "jarvis"
             );
 
-            speak(response);
+
+            speak(
+                response
+            );
+
 
             return;
-
         }
 
 
@@ -1077,20 +1205,19 @@ micBtn.addEventListener(
             recognition.stop();
 
             return;
-
         }
 
 
         try {
 
+            // English + Telugu friendly
             recognition.lang =
                 "en-IN";
 
+
             recognition.start();
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 "Microphone start error:",
@@ -1133,16 +1260,20 @@ imgInput.addEventListener(
         const response =
             `Boss, I received the image "${file.name}". Vision analysis will be connected next.`;
 
+
         addMessage(
             response,
             "jarvis"
         );
 
-        speak(response);
+
+        speak(
+            response
+        );
 
 
-        // Reset input
-        imgInput.value = "";
+        imgInput.value =
+            "";
 
     }
 );
@@ -1158,22 +1289,29 @@ clearBtn.addEventListener(
 
         memory = [];
 
+
         localStorage.removeItem(
             MEMORY_KEY
         );
 
-        chat.innerHTML = "";
+
+        chat.innerHTML =
+            "";
 
 
         const response =
             "Long-term memory cleared, Boss.";
+
 
         addMessage(
             response,
             "jarvis"
         );
 
-        speak(response);
+
+        speak(
+            response
+        );
 
     }
 );
@@ -1185,14 +1323,25 @@ clearBtn.addEventListener(
 
 loadMemory();
 
-
-setStatus(
-    "SYSTEM READY"
+setHudState(
+    "ready"
 );
 
 
 console.log(
+    "===================================="
+);
+
+console.log(
     "J.A.R.V.I.S AI CORE ONLINE"
+);
+
+console.log(
+    "Gemini + Memory + Voice + HUD"
+);
+
+console.log(
+    "===================================="
 );
 
 console.log(
