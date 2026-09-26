@@ -1,186 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <title>J.A.R.V.I.S</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- JARVIS MAIN INTERFACE -->
-    <main class="jarvis">
+    <!-- =====================================================
+         J.A.R.V.I.S HEADER
+         ===================================================== -->
 
-        <!-- TOP HUD -->
-        <header class="top-hud">
+    <header class="jarvis-header">
 
-            <div class="system-name">
-                <span class="small-text">STARK INDUSTRIES</span>
-                <span class="main-text">J.A.R.V.I.S</span>
-            </div>
+        <div class="logo-mark">
 
-            <div class="system-status">
-                <span class="status-light"></span>
-                <span>SYSTEM ONLINE</span>
-            </div>
+            <div class="logo-circle">
 
-        </header>
-
-
-        <!-- MAIN HUD AREA -->
-        <section class="hud-area">
-
-            <!-- LEFT HUD -->
-            <div class="hud-panel left-panel">
-
-                <div class="panel-title">
-                    SYSTEM
-                </div>
-
-                <div class="data-line">
-                    <span>CORE</span>
-                    <span id="coreStatus">ONLINE</span>
-                </div>
-
-                <div class="data-line">
-                    <span>VOICE</span>
-                    <span id="voiceStatus">READY</span>
-                </div>
-
-                <div class="data-line">
-                    <span>AI</span>
-                    <span id="aiStatus">STANDBY</span>
-                </div>
-
-                <div class="data-line">
-                    <span>MEMORY</span>
-                    <span id="memoryStatus">ACTIVE</span>
+                <div class="logo-j">
+                    J
                 </div>
 
             </div>
 
+            <div class="logo-lines"></div>
 
-            <!-- CENTRAL JARVIS CORE -->
-            <div class="jarvis-core">
+        </div>
 
-                <div class="outer-ring ring-one"></div>
-                <div class="outer-ring ring-two"></div>
-                <div class="outer-ring ring-three"></div>
 
-                <div class="energy-ring">
+        <div class="brand">
 
-                    <div class="energy-segment segment-one"></div>
-                    <div class="energy-segment segment-two"></div>
-                    <div class="energy-segment segment-three"></div>
-                    <div class="energy-segment segment-four"></div>
+            <h1>J.A.R.V.I.S</h1>
 
-                </div>
+            <p>
+                JUST A RATHER VERY INTELLIGENT SYSTEM
+            </p>
 
-                <div class="core">
+        </div>
 
-                    <div class="core-inner"></div>
 
-                    <div class="core-text">
+        <div class="system-online">
+
+            <span class="online-dot"></span>
+
+            <span>
+                SYSTEM ONLINE
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN JARVIS CORE
+         ===================================================== -->
+
+    <main>
+
+        <div class="core">
+
+            <!-- OUTER ROTATING RINGS -->
+
+            <div class="ring r1"></div>
+
+            <div class="ring r2"></div>
+
+            <div class="ring r3"></div>
+
+
+            <!-- ENERGY MARKERS -->
+
+            <div class="energy e1"></div>
+
+            <div class="energy e2"></div>
+
+            <div class="energy e3"></div>
+
+            <div class="energy e4"></div>
+
+
+            <!-- CENTER LOGO -->
+
+            <div class="center">
+
+                <div class="center-inner">
+
+                    <span class="center-j">
                         J
-                    </div>
+                    </span>
+
+                    <span class="center-label">
+                        AI
+                    </span>
 
                 </div>
 
             </div>
 
-
-            <!-- RIGHT HUD -->
-            <div class="hud-panel right-panel">
-
-                <div class="panel-title">
-                    DIAGNOSTICS
-                </div>
-
-                <div class="data-line">
-                    <span>CPU</span>
-                    <span id="cpuStatus">NORMAL</span>
-                </div>
-
-                <div class="data-line">
-                    <span>NETWORK</span>
-                    <span id="networkStatus">CONNECTED</span>
-                </div>
-
-                <div class="data-line">
-                    <span>SECURITY</span>
-                    <span id="securityStatus">ACTIVE</span>
-                </div>
-
-                <div class="data-line">
-                    <span>MODE</span>
-                    <span id="modeStatus">JARVIS</span>
-                </div>
-
-            </div>
-
-        </section>
+        </div>
 
 
-        <!-- HOLOGRAM MESSAGE -->
-        <section class="message-area">
+        <p class="core-text">
+            J.A.R.V.I.S CORE
+        </p>
 
-            <div class="message-line"></div>
-
-            <div id="jarvisMessage">
-                GOOD EVENING, BOSS.
-            </div>
-
-            <div class="message-sub">
-                J.A.R.V.I.S INITIALIZATION COMPLETE
-            </div>
-
-        </section>
+        <p class="core-status">
+            SYSTEM READY
+        </p>
 
 
-        <!-- VOICE BUTTON -->
-        <section class="voice-section">
 
-            <button id="voiceButton" class="voice-button">
+        <!-- =================================================
+             SYSTEM DIAGNOSTICS
+             ================================================= -->
 
-                <span class="mic-icon">🎙</span>
+        <div class="status">
 
-                <span class="voice-text">
-                    ACTIVATE JARVIS
+            <div class="status-header">
+
+                <span class="status-title">
+                    SYSTEM DIAGNOSTICS
                 </span>
 
+                <span class="status-code">
+                    07.26
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    AI ENGINE
+                </span>
+
+                <b class="on">
+                    ● OPERATIONAL
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    CONNECTION
+                </span>
+
+                <b class="on">
+                    ● ONLINE
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    VOICE INTERFACE
+                </span>
+
+                <b class="on">
+                    ● READY
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    LONG-TERM MEMORY
+                </span>
+
+                <b class="on">
+                    ● ACTIVE
+                </b>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHAT
+             ================================================= -->
+
+        <div
+            class="chat"
+            id="chat"
+        ></div>
+
+
+
+        <!-- =================================================
+             COMMAND AREA
+             ================================================= -->
+
+        <div class="input-area">
+
+            <input
+                id="msg"
+                type="text"
+                placeholder="Enter a command for J.A.R.V.I.S..."
+                autocomplete="off"
+            >
+
+
+            <button
+                id="send"
+                class="execute-btn"
+            >
+                EXECUTE
             </button>
 
-        </section>
+
+            <button
+                id="mic-btn"
+                class="icon-btn"
+                aria-label="Activate voice input"
+            >
+                🎙
+            </button>
 
 
-        <!-- BOTTOM HUD -->
-        <footer class="bottom-hud">
+            <button
+                id="cam-btn"
+                class="icon-btn"
+                aria-label="Analyze image"
+            >
+                📷
+            </button>
 
-            <div>
-                <span class="bottom-label">TIME</span>
-                <span id="time">--:--:--</span>
-            </div>
 
-            <div>
-                <span class="bottom-label">DATE</span>
-                <span id="date">--/--/----</span>
-            </div>
+            <button
+                id="clear-btn"
+                class="clear-btn"
+            >
+                CLEAR MEMORY
+            </button>
 
-            <div>
-                <span class="bottom-label">LOCATION</span>
-                <span id="location">SEARCHING...</span>
-            </div>
 
-        </footer>
+            <input
+                id="img-input"
+                type="file"
+                accept="image/*"
+                style="display:none"
+            >
+
+        </div>
 
     </main>
 
 
-    <!-- JAVASCRIPT -->
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
