@@ -1,172 +1,186 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+    <title>J.A.R.V.I.S</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>J.A.R.V.I.S</title>
-
-
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
-
 
 <body>
 
+    <!-- JARVIS MAIN INTERFACE -->
+    <main class="jarvis">
 
+        <!-- TOP HUD -->
+        <header class="top-hud">
 
-<header>
+            <div class="system-name">
+                <span class="small-text">STARK INDUSTRIES</span>
+                <span class="main-text">J.A.R.V.I.S</span>
+            </div>
 
- <h1>J.A.R.V.I.S</h1>
+            <div class="system-status">
+                <span class="status-light"></span>
+                <span>SYSTEM ONLINE</span>
+            </div>
 
- <p>PERSONAL AI ASSISTANT</p>
+        </header>
 
-</header>
 
+        <!-- MAIN HUD AREA -->
+        <section class="hud-area">
 
+            <!-- LEFT HUD -->
+            <div class="hud-panel left-panel">
 
-<div class="core">
+                <div class="panel-title">
+                    SYSTEM
+                </div>
 
- <div class="ring r1"></div>
+                <div class="data-line">
+                    <span>CORE</span>
+                    <span id="coreStatus">ONLINE</span>
+                </div>
 
- <div class="ring r2"></div>
+                <div class="data-line">
+                    <span>VOICE</span>
+                    <span id="voiceStatus">READY</span>
+                </div>
 
- <div class="center"></div>
+                <div class="data-line">
+                    <span>AI</span>
+                    <span id="aiStatus">STANDBY</span>
+                </div>
 
-</div>
+                <div class="data-line">
+                    <span>MEMORY</span>
+                    <span id="memoryStatus">ACTIVE</span>
+                </div>
 
+            </div>
 
 
-<p class="core-text">SYSTEM READY</p>
+            <!-- CENTRAL JARVIS CORE -->
+            <div class="jarvis-core">
 
+                <div class="outer-ring ring-one"></div>
+                <div class="outer-ring ring-two"></div>
+                <div class="outer-ring ring-three"></div>
 
+                <div class="energy-ring">
 
-<div class="status">
+                    <div class="energy-segment segment-one"></div>
+                    <div class="energy-segment segment-two"></div>
+                    <div class="energy-segment segment-three"></div>
+                    <div class="energy-segment segment-four"></div>
 
- <h2>SYSTEM DIAGNOSTICS</h2>
+                </div>
 
+                <div class="core">
 
+                    <div class="core-inner"></div>
 
- <div class="row">
+                    <div class="core-text">
+                        J
+                    </div>
 
-  <span>AI ENGINE</span>
+                </div>
 
-  <b class="on">● OPERATIONAL</b>
+            </div>
 
- </div>
 
+            <!-- RIGHT HUD -->
+            <div class="hud-panel right-panel">
 
+                <div class="panel-title">
+                    DIAGNOSTICS
+                </div>
 
- <div class="row">
+                <div class="data-line">
+                    <span>CPU</span>
+                    <span id="cpuStatus">NORMAL</span>
+                </div>
 
-  <span>CONNECTION</span>
+                <div class="data-line">
+                    <span>NETWORK</span>
+                    <span id="networkStatus">CONNECTED</span>
+                </div>
 
-  <b class="on">● ONLINE</b>
+                <div class="data-line">
+                    <span>SECURITY</span>
+                    <span id="securityStatus">ACTIVE</span>
+                </div>
 
- </div>
+                <div class="data-line">
+                    <span>MODE</span>
+                    <span id="modeStatus">JARVIS</span>
+                </div>
 
+            </div>
 
+        </section>
 
- <div class="row">
 
-  <span>VOICE INTERFACE</span>
+        <!-- HOLOGRAM MESSAGE -->
+        <section class="message-area">
 
-  <b class="on">● READY</b>
+            <div class="message-line"></div>
 
- </div>
+            <div id="jarvisMessage">
+                GOOD EVENING, BOSS.
+            </div>
 
+            <div class="message-sub">
+                J.A.R.V.I.S INITIALIZATION COMPLETE
+            </div>
 
+        </section>
 
- <div class="row">
 
-  <span>LONG-TERM MEMORY</span>
+        <!-- VOICE BUTTON -->
+        <section class="voice-section">
 
-  <b class="on">● ACTIVE</b>
+            <button id="voiceButton" class="voice-button">
 
- </div>
+                <span class="mic-icon">🎙</span>
 
-</div>
+                <span class="voice-text">
+                    ACTIVATE JARVIS
+                </span>
 
+            </button>
 
+        </section>
 
-<div class="chat" id="chat"></div>
 
+        <!-- BOTTOM HUD -->
+        <footer class="bottom-hud">
 
+            <div>
+                <span class="bottom-label">TIME</span>
+                <span id="time">--:--:--</span>
+            </div>
 
-<div class="input-area">
+            <div>
+                <span class="bottom-label">DATE</span>
+                <span id="date">--/--/----</span>
+            </div>
 
+            <div>
+                <span class="bottom-label">LOCATION</span>
+                <span id="location">SEARCHING...</span>
+            </div>
 
+        </footer>
 
- <input
+    </main>
 
-  id="msg"
 
-  placeholder="Enter a command for J.A.R.V.I.S..."
-
-  autocomplete="off"
-
- >
-
-
-
- <button id="send">EXECUTE</button>
-
-
-
- <button id="mic-btn" aria-label="Activate voice input">
-
-  🎙
-
- </button>
-
-
-
- <button id="cam-btn" aria-label="Analyze image">
-
-  📷
-
- </button>
-
-
-
- <button id="clear-btn">
-
-  CLEAR MEMORY
-
- </button>
-
-
-
- <input
-
-  id="img-input"
-
-  type="file"
-
-  accept="image/*"
-
-  style="display:none"
-
- >
-
-
-
-</div>
-
-
-
-<script src="script.js"></script>
-
-
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
 
 </body>
-
 </html>
-
