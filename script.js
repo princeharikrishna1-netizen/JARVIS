@@ -1,618 +1,873 @@
 // =====================================================
 // J.A.R.V.I.S - AI CORE
-// Voice + Chat + Memory + Camera + Basic Commands
+// Gemini + Cloudflare Worker + Voice + Memory
 // =====================================================
+
+// =====================================================
+// CONFIGURATION
+// =====================================================
+
+const JARVIS_API =
+    "https://jarvis.princeharikrishna1.workers.dev/api/chat";
 
 
 // =====================================================
-// 1. ELEMENTS
+// ELEMENTS
 // =====================================================
 
 const chat = document.getElementById("chat");
-const msgInput = document.getElementById("msg");
-const sendBtn = document.getElementById("send");
+const msg = document.getElementById("msg");
+const send = document.getElementById("send");
 const micBtn = document.getElementById("mic-btn");
 const camBtn = document.getElementById("cam-btn");
 const clearBtn = document.getElementById("clear-btn");
 const imgInput = document.getElementById("img-input");
-
 const coreStatus = document.querySelector(".core-status");
 
 
 // =====================================================
-// 2. MEMORY
+// MEMORY
 // =====================================================
 
 const MEMORY_KEY = "jarvisMemory";
 
-let memory = JSON.parse(localStorage.getItem(MEMORY_KEY)) || [];
+let memory = [];
 
+try {
+    const saved = localStorage.getItem(MEMORY_KEY);
 
-// =====================================================
-// 3. CHAT MESSAGE
-// =====================================================
-
-function addMessage(text, type = "jarvis") {
-
-    const message = document.createElement("div");
-
-    message.className = `msg ${type}`;
-
-    message.textContent = text;
-
-    chat.appendChild(message);
-
-    chat.scrollTop = chat.scrollHeight;
-
-    memory.push({
-        type: type,
-        text: text,
-        time: new Date().toISOString()
-    });
-
-    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+    if (saved) {
+        memory = JSON.parse(saved);
+    }
+} catch (error) {
+    console.error("Memory load error:", error);
+    memory = [];
 }
 
 
 // =====================================================
-// 4. LOAD MEMORY
+// SAVE MEMORY
+// =====================================================
+
+function saveMemory() {
+
+    try {
+
+        localStorage.setItem(
+            MEMORY_KEY,
+            JSON.stringify(memory.slice(-30))
+        );
+
+    } catch (error) {
+
+        console.error("Memory save error:", error);
+
+    }
+
+}
+
+
+// =====================================================
+// ADD MESSAGE TO UI
+// =====================================================
+
+function addMessage(
+    text,
+    sender = "jarvis",
+    save = true
+) {
+
+    if (!text) return;
+
+
+    const message = document.createElement("div");
+
+    message.className =
+        `message ${sender}`;
+
+
+    const label = document.createElement("div");
+
+    label.className = "message-label";
+
+    label.textContent =
+        sender === "user"
+            ? "BOSS"
+            : "J.A.R.V.I.S";
+
+
+    const content = document.createElement("div");
+
+    content.className = "message-content";
+
+    content.textContent = text;
+
+
+    message.appendChild(label);
+
+    message.appendChild(content);
+
+    chat.appendChild(message);
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+
+    if (save) {
+
+        memory.push({
+
+            role:
+                sender === "user"
+                    ? "user"
+                    : "model",
+
+            text: text,
+
+            time:
+                new Date().toISOString()
+
+        });
+
+
+        saveMemory();
+
+    }
+
+}
+
+
+// =====================================================
+// LOAD MEMORY
 // =====================================================
 
 function loadMemory() {
 
-    chat.innerHTML = "";
-
-    if (memory.length === 0) {
-
-        addMessage(
-            "Good evening, Boss. J.A.R.V.I.S is online. System ready."
-        );
-
+    if (!Array.isArray(memory)) {
+        memory = [];
         return;
     }
 
-    memory.forEach(item => {
 
-        const message = document.createElement("div");
+    memory
+        .slice(-20)
+        .forEach(item => {
 
-        message.className = `msg ${item.type}`;
+            addMessage(
+                item.text,
+                item.role === "user"
+                    ? "user"
+                    : "jarvis",
+                false
+            );
 
-        message.textContent = item.text;
+        });
 
-        chat.appendChild(message);
-
-    });
-
-    chat.scrollTop = chat.scrollHeight;
 }
 
 
 // =====================================================
-// 5. TEXT TO SPEECH
+// SPEECH
 // =====================================================
 
 function speak(text) {
 
-    if (!("speechSynthesis" in window)) {
+    if (
+        !("speechSynthesis" in window)
+    ) {
         return;
     }
+
 
     window.speechSynthesis.cancel();
 
-    const speech = new SpeechSynthesisUtterance(text);
 
-    speech.lang = "en-IN";
-    speech.rate = 0.95;
-    speech.pitch = 0.9;
-    speech.volume = 1;
-
-    speech.onstart = () => {
-
-        if (coreStatus) {
-            coreStatus.textContent = "SPEAKING";
-        }
-
-    };
-
-    speech.onend = () => {
-
-        if (coreStatus) {
-            coreStatus.textContent = "SYSTEM READY";
-        }
-
-    };
-
-    window.speechSynthesis.speak(speech);
-}
+    const cleanText =
+        text
+            .replace(
+                /[*_#`]/g,
+                ""
+            )
+            .trim();
 
 
-// =====================================================
-// 6. JARVIS RESPONSE
-// =====================================================
-
-function jarvisReply(text, voice = true) {
-
-    addMessage(text, "jarvis");
-
-    if (voice) {
-        speak(text);
-    }
-}
+    if (!cleanText) return;
 
 
-// =====================================================
-// 7. TIME
-// =====================================================
-
-function getCurrentTime() {
-
-    const now = new Date();
-
-    return now.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-    });
-}
-
-
-// =====================================================
-// 8. DATE
-// =====================================================
-
-function getCurrentDate() {
-
-    const now = new Date();
-
-    return now.toLocaleDateString("en-IN", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-    });
-}
-
-
-// =====================================================
-// 9. LOCATION
-// =====================================================
-
-function getLocation() {
-
-    if (!navigator.geolocation) {
-
-        jarvisReply(
-            "Boss, location service is not supported by this browser."
+    const utterance =
+        new SpeechSynthesisUtterance(
+            cleanText
         );
 
-        return;
-    }
 
-    if (coreStatus) {
-        coreStatus.textContent = "LOCATING";
-    }
-
-    jarvisReply(
-        "Boss, requesting your location."
-    );
-
-    navigator.geolocation.getCurrentPosition(
-
-        position => {
-
-            const latitude =
-                position.coords.latitude.toFixed(6);
-
-            const longitude =
-                position.coords.longitude.toFixed(6);
-
-            const accuracy =
-                Math.round(position.coords.accuracy);
-
-            const result =
-                `Boss, your current coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy approximately ${accuracy} meters.`;
-
-            addMessage(result, "jarvis");
-
-            speak(result);
-
-            if (coreStatus) {
-                coreStatus.textContent = "SYSTEM READY";
-            }
-
-        },
-
-        error => {
-
-            let message =
-                "Boss, I could not access your location.";
-
-            if (error.code === 1) {
-
-                message =
-                    "Boss, location permission was denied. Please allow location access in your browser.";
-
-            } else if (error.code === 2) {
-
-                message =
-                    "Boss, your location is currently unavailable.";
-
-            } else if (error.code === 3) {
-
-                message =
-                    "Boss, the location request timed out.";
-
-            }
-
-            jarvisReply(message);
-
-            if (coreStatus) {
-                coreStatus.textContent = "SYSTEM READY";
-            }
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-        }
-    );
-}
-
-
-// =====================================================
-// 10. OPEN WEBSITE
-// =====================================================
-
-function openWebsite(url) {
-
-    window.open(url, "_blank");
-
-}
-
-
-// =====================================================
-// 11. PROCESS COMMAND
-// =====================================================
-
-function processCommand(command) {
-
-    const originalCommand = command.trim();
-
-    const text = originalCommand.toLowerCase();
-
-    if (!text) {
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // HELLO
-    // ---------------------------------------------
-
+    // Telugu / English support
     if (
-        text.includes("hello") ||
-        text.includes("hi jarvis") ||
-        text.includes("hey jarvis") ||
-        text === "hi" ||
-        text === "hey" ||
-        text.includes("హలో") ||
-        text.includes("హాయ్")
+        /[\u0C00-\u0C7F]/.test(cleanText)
     ) {
 
-        jarvisReply(
-            "Hello Boss. J.A.R.V.I.S is online and ready."
-        );
+        utterance.lang = "te-IN";
 
-        return;
+    } else {
+
+        utterance.lang = "en-IN";
+
     }
 
 
-    // ---------------------------------------------
+    utterance.rate = 0.95;
+
+    utterance.pitch = 1.0;
+
+    utterance.volume = 1.0;
+
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+// =====================================================
+// STATUS
+// =====================================================
+
+function setStatus(text) {
+
+    if (coreStatus) {
+
+        coreStatus.textContent =
+            text;
+
+    }
+
+}
+
+
+// =====================================================
+// LOCAL COMMANDS
+// =====================================================
+
+function handleLocalCommand(command) {
+
+    const text =
+        command
+            .toLowerCase()
+            .trim();
+
+
+    // -----------------------------------------------
+    // GREETING
+    // -----------------------------------------------
+
+    if (
+        text === "hello" ||
+        text === "hi" ||
+        text === "hey" ||
+        text === "హలో" ||
+        text === "హాయ్"
+    ) {
+
+        return "Hello Boss. J.A.R.V.I.S is online and ready.";
+
+    }
+
+
+    // -----------------------------------------------
     // WHO ARE YOU
-    // ---------------------------------------------
+    // -----------------------------------------------
 
     if (
         text.includes("who are you") ||
-        text.includes("what are you") ||
-        text.includes("నువ్వు ఎవరు")
+        text.includes("neevaru") ||
+        text.includes("నువ్వెవరు")
     ) {
 
-        jarvisReply(
-            "I am J.A.R.V.I.S, your intelligent virtual assistant."
-        );
+        return "I am J.A.R.V.I.S, your personal artificial intelligence assistant.";
 
-        return;
     }
 
 
-    // ---------------------------------------------
+    // -----------------------------------------------
     // TIME
-    // ---------------------------------------------
+    // -----------------------------------------------
 
     if (
         text === "time" ||
         text.includes("what time") ||
-        text.includes("current time") ||
         text.includes("సమయం")
     ) {
 
-        const time = getCurrentTime();
+        return `Boss, the current time is ${new Date().toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        )}.`;
 
-        jarvisReply(
-            `Boss, the current time is ${time}.`
-        );
-
-        return;
     }
 
 
-    // ---------------------------------------------
+    // -----------------------------------------------
     // DATE
-    // ---------------------------------------------
+    // -----------------------------------------------
 
     if (
         text === "date" ||
         text.includes("today date") ||
-        text.includes("what is the date") ||
-        text.includes("today") ||
         text.includes("తేదీ")
     ) {
 
-        const date = getCurrentDate();
+        return `Boss, today is ${new Date().toLocaleDateString(
+            "en-IN",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        )}.`;
 
-        jarvisReply(
-            `Boss, today is ${date}.`
-        );
-
-        return;
     }
 
 
-    // ---------------------------------------------
-    // LOCATION
-    // ---------------------------------------------
+    return null;
 
-    if (
-        text.includes("location") ||
-        text.includes("where am i") ||
-        text.includes("my location") ||
-        text.includes("నా లొకేషన్") ||
-        text.includes("నేను ఎక్కడ")
-    ) {
-
-        getLocation();
-
-        return;
-    }
+}
 
 
-    // ---------------------------------------------
-    // OPEN GOOGLE
-    // ---------------------------------------------
+// =====================================================
+// LOCATION
+// =====================================================
 
-    if (
-        text.includes("open google") ||
-        text.includes("google open")
-    ) {
+function getLocation() {
 
-        jarvisReply(
-            "Opening Google, Boss."
-        );
+    return new Promise(
+        resolve => {
 
-        setTimeout(() => {
+            if (
+                !navigator.geolocation
+            ) {
 
-            openWebsite("https://www.google.com");
-
-        }, 500);
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // OPEN YOUTUBE
-    // ---------------------------------------------
-
-    if (
-        text.includes("open youtube") ||
-        text.includes("youtube open")
-    ) {
-
-        jarvisReply(
-            "Opening YouTube, Boss."
-        );
-
-        setTimeout(() => {
-
-            openWebsite("https://www.youtube.com");
-
-        }, 500);
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // SEARCH GOOGLE
-    // ---------------------------------------------
-
-    if (
-        text.startsWith("search google for ") ||
-        text.startsWith("google search ")
-    ) {
-
-        let searchText = "";
-
-        if (text.startsWith("search google for ")) {
-
-            searchText =
-                originalCommand.substring(
-                    "search google for ".length
+                resolve(
+                    "Boss, this browser does not support location."
                 );
 
-        } else {
+                return;
 
-            searchText =
-                originalCommand.substring(
-                    "google search ".length
-                );
+            }
 
-        }
 
-        if (!searchText.trim()) {
+            navigator.geolocation.getCurrentPosition(
 
-            jarvisReply(
-                "Boss, what should I search for?"
+                position => {
+
+                    const latitude =
+                        position.coords.latitude
+                            .toFixed(6);
+
+                    const longitude =
+                        position.coords.longitude
+                            .toFixed(6);
+
+                    const accuracy =
+                        Math.round(
+                            position.coords.accuracy
+                        );
+
+
+                    resolve(
+
+                        `Boss, your current coordinates are latitude ${latitude}, longitude ${longitude}. Accuracy is approximately ${accuracy} meters.`
+
+                    );
+
+                },
+
+
+                error => {
+
+                    console.error(
+                        "Location error:",
+                        error
+                    );
+
+
+                    resolve(
+                        "Boss, I could not access your location. Please allow location permission for J.A.R.V.I.S."
+                    );
+
+                },
+
+                {
+
+                    enableHighAccuracy: true,
+
+                    timeout: 10000,
+
+                    maximumAge: 0
+
+                }
+
             );
 
-            return;
         }
-
-        jarvisReply(
-            `Searching Google for ${searchText}.`
-        );
-
-        setTimeout(() => {
-
-            const url =
-                "https://www.google.com/search?q=" +
-                encodeURIComponent(searchText);
-
-            openWebsite(url);
-
-        }, 500);
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // SEARCH YOUTUBE
-    // ---------------------------------------------
-
-    if (
-        text.startsWith("search youtube for ") ||
-        text.startsWith("youtube search ")
-    ) {
-
-        let searchText = "";
-
-        if (text.startsWith("search youtube for ")) {
-
-            searchText =
-                originalCommand.substring(
-                    "search youtube for ".length
-                );
-
-        } else {
-
-            searchText =
-                originalCommand.substring(
-                    "youtube search ".length
-                );
-
-        }
-
-        if (!searchText.trim()) {
-
-            jarvisReply(
-                "Boss, what should I search for on YouTube?"
-            );
-
-            return;
-        }
-
-        jarvisReply(
-            `Searching YouTube for ${searchText}.`
-        );
-
-        setTimeout(() => {
-
-            const url =
-                "https://www.youtube.com/results?search_query=" +
-                encodeURIComponent(searchText);
-
-            openWebsite(url);
-
-        }, 500);
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // CLEAR MEMORY
-    // ---------------------------------------------
-
-    if (
-        text.includes("clear memory") ||
-        text.includes("delete memory") ||
-        text.includes("clear chat")
-    ) {
-
-        clearMemory();
-
-        return;
-    }
-
-
-    // ---------------------------------------------
-    // UNKNOWN COMMAND
-    // ---------------------------------------------
-
-    jarvisReply(
-        `Boss, I heard "${originalCommand}". My AI brain is not connected yet.`
     );
 
 }
 
 
 // =====================================================
-// 12. SEND TEXT COMMAND
+// OPEN WEBSITE
 // =====================================================
 
-function sendMessage() {
+function openWebsite(url) {
 
-    const command =
-        msgInput.value.trim();
+    window.open(
+        url,
+        "_blank"
+    );
 
-    if (!command) {
-        return;
-    }
-
-    addMessage(command, "user");
-
-    msgInput.value = "";
-
-    processCommand(command);
 }
 
 
 // =====================================================
-// 13. SEND BUTTON
+// SPECIAL COMMANDS
 // =====================================================
 
-sendBtn.addEventListener(
+async function checkSpecialCommand(
+    command
+) {
+
+    const text =
+        command
+            .toLowerCase()
+            .trim();
+
+
+    // -----------------------------------------------
+    // LOCATION
+    // -----------------------------------------------
+
+    if (
+        text.includes("my location") ||
+        text.includes("where am i") ||
+        text.includes("నా లొకేషన్") ||
+        text.includes("నేను ఎక్కడ")
+    ) {
+
+        return await getLocation();
+
+    }
+
+
+    // -----------------------------------------------
+    // GOOGLE
+    // -----------------------------------------------
+
+    if (
+        text === "open google"
+    ) {
+
+        openWebsite(
+            "https://www.google.com"
+        );
+
+        return "Opening Google, Boss.";
+
+    }
+
+
+    // -----------------------------------------------
+    // YOUTUBE
+    // -----------------------------------------------
+
+    if (
+        text === "open youtube"
+    ) {
+
+        openWebsite(
+            "https://www.youtube.com"
+        );
+
+        return "Opening YouTube, Boss.";
+
+    }
+
+
+    // -----------------------------------------------
+    // GOOGLE SEARCH
+    // -----------------------------------------------
+
+    if (
+        text.startsWith("google search ")
+    ) {
+
+        const query =
+            command.substring(
+                "google search ".length
+            ).trim();
+
+
+        if (query) {
+
+            openWebsite(
+                "https://www.google.com/search?q=" +
+                encodeURIComponent(query)
+            );
+
+
+            return `Searching Google for ${query}.`;
+
+        }
+
+    }
+
+
+    // -----------------------------------------------
+    // YOUTUBE SEARCH
+    // -----------------------------------------------
+
+    if (
+        text.startsWith("youtube search ")
+    ) {
+
+        const query =
+            command.substring(
+                "youtube search ".length
+            ).trim();
+
+
+        if (query) {
+
+            openWebsite(
+                "https://www.youtube.com/results?search_query=" +
+                encodeURIComponent(query)
+            );
+
+
+            return `Searching YouTube for ${query}.`;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+// =====================================================
+// SEND MESSAGE TO GEMINI
+// =====================================================
+
+async function askGemini(
+    userMessage
+) {
+
+    setStatus(
+        "THINKING..."
+    );
+
+
+    // Send recent conversation only
+    const history =
+        memory
+            .slice(-12)
+            .map(item => ({
+
+                role:
+                    item.role === "model"
+                        ? "model"
+                        : "user",
+
+                text:
+                    item.text
+
+            }));
+
+
+    try {
+
+        const response =
+            await fetch(
+                JARVIS_API,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        message:
+                            userMessage,
+
+                        history:
+                            history
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            console.error(
+                "JARVIS API Error:",
+                data
+            );
+
+
+            throw new Error(
+                data.error ||
+                "Gemini request failed."
+            );
+
+        }
+
+
+        if (
+            !data.success ||
+            !data.reply
+        ) {
+
+            throw new Error(
+                data.error ||
+                "No response from Gemini."
+            );
+
+        }
+
+
+        setStatus(
+            "SYSTEM READY"
+        );
+
+
+        return data.reply;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Gemini connection error:",
+            error
+        );
+
+
+        setStatus(
+            "CONNECTION ERROR"
+        );
+
+
+        return (
+            "Boss, I could not connect to my AI brain right now. Please check the Cloudflare Worker connection."
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// MAIN JARVIS PROCESSOR
+// =====================================================
+
+async function processCommand(
+    command
+) {
+
+    const originalCommand =
+        command.trim();
+
+
+    if (!originalCommand) {
+        return;
+    }
+
+
+    // -----------------------------------------------
+    // SHOW USER MESSAGE
+    // -----------------------------------------------
+
+    addMessage(
+        originalCommand,
+        "user"
+    );
+
+
+    // -----------------------------------------------
+    // CLEAR MEMORY
+    // -----------------------------------------------
+
+    if (
+        originalCommand
+            .toLowerCase()
+            .trim() ===
+        "clear memory"
+    ) {
+
+        memory = [];
+
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
+
+        chat.innerHTML = "";
+
+        const response =
+            "Memory cleared, Boss. J.A.R.V.I.S is ready.";
+
+        addMessage(
+            response,
+            "jarvis"
+        );
+
+        speak(response);
+
+        return;
+
+    }
+
+
+    // -----------------------------------------------
+    // LOCAL COMMAND
+    // -----------------------------------------------
+
+    const localResponse =
+        handleLocalCommand(
+            originalCommand
+        );
+
+
+    if (localResponse) {
+
+        addMessage(
+            localResponse,
+            "jarvis"
+        );
+
+        speak(
+            localResponse
+        );
+
+        setStatus(
+            "SYSTEM READY"
+        );
+
+        return;
+
+    }
+
+
+    // -----------------------------------------------
+    // SPECIAL COMMAND
+    // -----------------------------------------------
+
+    const specialResponse =
+        await checkSpecialCommand(
+            originalCommand
+        );
+
+
+    if (specialResponse) {
+
+        addMessage(
+            specialResponse,
+            "jarvis"
+        );
+
+        speak(
+            specialResponse
+        );
+
+        setStatus(
+            "SYSTEM READY"
+        );
+
+        return;
+
+    }
+
+
+    // -----------------------------------------------
+    // GEMINI AI
+    // -----------------------------------------------
+
+    const aiResponse =
+        await askGemini(
+            originalCommand
+        );
+
+
+    addMessage(
+        aiResponse,
+        "jarvis"
+    );
+
+
+    speak(
+        aiResponse
+    );
+
+}
+
+
+// =====================================================
+// SEND BUTTON
+// =====================================================
+
+send.addEventListener(
     "click",
-    sendMessage
-);
+    async () => {
+
+        const command =
+            msg.value.trim();
 
 
-// =====================================================
-// 14. ENTER KEY
-// =====================================================
+        if (!command) {
+            return;
+        }
 
-msgInput.addEventListener(
-    "keydown",
-    event => {
 
-        if (event.key === "Enter") {
+        msg.value = "";
 
-            event.preventDefault();
+        send.disabled = true;
 
-            sendMessage();
+        micBtn.disabled = true;
+
+
+        try {
+
+            await processCommand(
+                command
+            );
+
+        }
+
+        finally {
+
+            send.disabled = false;
+
+            micBtn.disabled = false;
+
+            msg.focus();
 
         }
 
@@ -621,12 +876,35 @@ msgInput.addEventListener(
 
 
 // =====================================================
-// 15. SPEECH RECOGNITION
+// ENTER KEY
+// =====================================================
+
+msg.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            send.click();
+
+        }
+
+    }
+);
+
+
+// =====================================================
+// VOICE RECOGNITION
 // =====================================================
 
 const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
+
 
 let recognition = null;
 
@@ -638,112 +916,91 @@ if (SpeechRecognition) {
     recognition =
         new SpeechRecognition();
 
-    recognition.lang = "en-IN";
 
     recognition.continuous = false;
 
     recognition.interimResults = false;
 
-    recognition.maxAlternatives = 1;
+    recognition.lang = "en-IN";
 
-
-    // ---------------------------------------------
-    // START
-    // ---------------------------------------------
 
     recognition.onstart = () => {
 
         isListening = true;
 
-        micBtn.classList.add("active");
+        micBtn.classList.add(
+            "active"
+        );
 
-        if (coreStatus) {
-            coreStatus.textContent = "LISTENING";
-        }
+        setStatus(
+            "LISTENING..."
+        );
 
     };
 
 
-    // ---------------------------------------------
-    // RESULT
-    // ---------------------------------------------
-
     recognition.onresult = event => {
 
         const transcript =
-            event.results[0][0].transcript.trim();
+            event
+                .results[0][0]
+                .transcript
+                .trim();
 
-        if (!transcript) {
-            return;
-        }
 
-        addMessage(
-            transcript,
-            "user"
-        );
+        msg.value =
+            transcript;
 
-        processCommand(
+
+        processVoiceCommand(
             transcript
         );
 
     };
 
 
-    // ---------------------------------------------
-    // END
-    // ---------------------------------------------
+    recognition.onerror = event => {
+
+        console.error(
+            "Speech recognition error:",
+            event.error
+        );
+
+
+        isListening = false;
+
+        micBtn.classList.remove(
+            "active"
+        );
+
+
+        setStatus(
+            "SYSTEM READY"
+        );
+
+    };
+
 
     recognition.onend = () => {
 
         isListening = false;
 
-        micBtn.classList.remove("active");
-
-        if (coreStatus) {
-            coreStatus.textContent = "SYSTEM READY";
-        }
-
-    };
-
-
-    // ---------------------------------------------
-    // ERROR
-    // ---------------------------------------------
-
-    recognition.onerror = event => {
-
-        isListening = false;
-
-        micBtn.classList.remove("active");
-
-        if (coreStatus) {
-            coreStatus.textContent = "SYSTEM READY";
-        }
-
-        let message =
-            "Boss, voice recognition failed.";
-
-        if (event.error === "not-allowed") {
-
-            message =
-                "Boss, microphone permission was denied. Please allow microphone access.";
-
-        } else if (event.error === "no-speech") {
-
-            message =
-                "Boss, I did not hear anything.";
-
-        } else if (event.error === "network") {
-
-            message =
-                "Boss, voice recognition requires a network connection.";
-
-        }
-
-        addMessage(
-            message,
-            "jarvis"
+        micBtn.classList.remove(
+            "active"
         );
+
+
+        if (
+            coreStatus &&
+            coreStatus.textContent ===
+            "LISTENING..."
+        ) {
+
+            setStatus(
+                "SYSTEM READY"
+            );
+
+        }
 
     };
 
@@ -751,7 +1008,47 @@ if (SpeechRecognition) {
 
 
 // =====================================================
-// 16. MICROPHONE BUTTON
+// PROCESS VOICE COMMAND
+// =====================================================
+
+async function processVoiceCommand(
+    transcript
+) {
+
+    if (!transcript) {
+        return;
+    }
+
+
+    msg.value = "";
+
+
+    send.disabled = true;
+
+    micBtn.disabled = true;
+
+
+    try {
+
+        await processCommand(
+            transcript
+        );
+
+    }
+
+    finally {
+
+        send.disabled = false;
+
+        micBtn.disabled = false;
+
+    }
+
+}
+
+
+// =====================================================
+// MICROPHONE BUTTON
 // =====================================================
 
 micBtn.addEventListener(
@@ -760,11 +1057,18 @@ micBtn.addEventListener(
 
         if (!recognition) {
 
-            jarvisReply(
-                "Boss, speech recognition is not supported in this browser."
+            const response =
+                "Boss, voice recognition is not supported by this browser.";
+
+            addMessage(
+                response,
+                "jarvis"
             );
 
+            speak(response);
+
             return;
+
         }
 
 
@@ -773,17 +1077,23 @@ micBtn.addEventListener(
             recognition.stop();
 
             return;
+
         }
 
 
         try {
 
+            recognition.lang =
+                "en-IN";
+
             recognition.start();
 
-        } catch (error) {
+        }
 
-            console.log(
-                "Recognition start error:",
+        catch (error) {
+
+            console.error(
+                "Microphone start error:",
                 error
             );
 
@@ -794,7 +1104,7 @@ micBtn.addEventListener(
 
 
 // =====================================================
-// 17. CAMERA BUTTON
+// CAMERA / IMAGE
 // =====================================================
 
 camBtn.addEventListener(
@@ -807,59 +1117,31 @@ camBtn.addEventListener(
 );
 
 
-// =====================================================
-// 18. IMAGE SELECTED
-// =====================================================
-
 imgInput.addEventListener(
     "change",
-    event => {
+    () => {
 
         const file =
-            event.target.files[0];
+            imgInput.files?.[0];
+
 
         if (!file) {
             return;
         }
 
 
+        const response =
+            `Boss, I received the image "${file.name}". Vision analysis will be connected next.`;
+
         addMessage(
-            `Image received: ${file.name}`,
-            "user"
+            response,
+            "jarvis"
         );
 
-
-        const imageURL =
-            URL.createObjectURL(file);
+        speak(response);
 
 
-        const image =
-            document.createElement("img");
-
-        image.src = imageURL;
-
-        image.style.maxWidth = "100%";
-
-        image.style.maxHeight = "250px";
-
-        image.style.marginTop = "10px";
-
-        image.style.borderRadius = "12px";
-
-        image.style.display = "block";
-
-
-        chat.appendChild(image);
-
-        chat.scrollTop =
-            chat.scrollHeight;
-
-
-        jarvisReply(
-            "Boss, image received. AI vision is not connected yet."
-        );
-
-
+        // Reset input
         imgInput.value = "";
 
     }
@@ -867,70 +1149,53 @@ imgInput.addEventListener(
 
 
 // =====================================================
-// 19. CLEAR MEMORY
-// =====================================================
-
-function clearMemory() {
-
-    localStorage.removeItem(
-        MEMORY_KEY
-    );
-
-    memory = [];
-
-    chat.innerHTML = "";
-
-    addMessage(
-        "Memory cleared, Boss. J.A.R.V.I.S is ready."
-    );
-
-}
-
-
-// =====================================================
-// 20. CLEAR MEMORY BUTTON
+// CLEAR MEMORY BUTTON
 // =====================================================
 
 clearBtn.addEventListener(
     "click",
     () => {
 
-        const confirmed =
-            confirm(
-                "Clear J.A.R.V.I.S memory?"
-            );
+        memory = [];
 
-        if (confirmed) {
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
 
-            clearMemory();
+        chat.innerHTML = "";
 
-        }
+
+        const response =
+            "Long-term memory cleared, Boss.";
+
+        addMessage(
+            response,
+            "jarvis"
+        );
+
+        speak(response);
 
     }
 );
 
 
 // =====================================================
-// 21. INITIALIZE J.A.R.V.I.S
+// INITIALIZE
 // =====================================================
 
 loadMemory();
 
 
-// =====================================================
-// 22. SYSTEM READY
-// =====================================================
+setStatus(
+    "SYSTEM READY"
+);
+
 
 console.log(
-    "J.A.R.V.I.S initialized successfully."
+    "J.A.R.V.I.S AI CORE ONLINE"
 );
 
 console.log(
-    "Voice:",
-    !!SpeechRecognition
-);
-
-console.log(
-    "Speech Synthesis:",
-    "speechSynthesis" in window
+    "Cloudflare Gemini endpoint:",
+    JARVIS_API
 );
