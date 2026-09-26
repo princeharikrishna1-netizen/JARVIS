@@ -1,258 +1,650 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+/* =========================================================
+   J.A.R.V.I.S — 3D HUD INTERFACE
+   ========================================================= */
 
-
-
-*{
-
+* {
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
+}
 
-    font-family: 'Orbitron', sans-serif;
+:root {
+    --cyan: #00eaff;
+    --blue: #008cff;
+    --dark-blue: #001b2b;
+    --deep-black: #02070c;
+    --text: #b8f8ff;
+}
 
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--deep-black);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
 
+/* =========================================================
+   MAIN BACKGROUND
+   ========================================================= */
 
 body {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0, 120, 180, 0.18) 0%,
+            rgba(0, 20, 35, 0.35) 25%,
+            #02070c 65%
+        );
 
-    background: #000;
-
-    color: #0ff;
-
-    padding: 20px;
-
-    overflow-x: hidden;
-
-    min-height: 100vh;
-
+    position: relative;
 }
 
 
+/* Moving grid */
 
-header {
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
 
-    text-align: center;
+    background-image:
+        linear-gradient(
+            rgba(0, 180, 255, 0.06) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 180, 255, 0.06) 1px,
+            transparent 1px
+        );
 
-    margin-bottom: 10px;
+    background-size: 45px 45px;
 
+    animation: gridMove 12s linear infinite;
+
+    pointer-events: none;
+}
+
+@keyframes gridMove {
+
+    from {
+        background-position: 0 0, 0 0;
+    }
+
+    to {
+        background-position: 45px 45px, 45px 45px;
+    }
 }
 
 
+/* =========================================================
+   MAIN JARVIS
+   ========================================================= */
 
-header h1 {
+.jarvis {
+    width: 100%;
+    height: 100vh;
 
-    font-size: 32px;
-
-    letter-spacing: 6px;
-
-    text-shadow:
-
-      0 0 12px #0ff,
-
-      0 0 25px rgba(0, 255, 255, 0.5);
-
-}
-
-
-
-header p {
-
-    font-size: 10px;
-
-    letter-spacing: 4px;
-
-    opacity: 0.6;
-
-    margin-top: 5px;
-
-}
-
-
-
-.core {
+    display: flex;
+    flex-direction: column;
 
     position: relative;
 
-    width: 160px;
+    padding: 25px 35px;
 
-    height: 160px;
+    overflow: hidden;
+}
 
-    margin: 25px auto;
+
+/* =========================================================
+   TOP HUD
+   ========================================================= */
+
+.top-hud {
+    width: 100%;
 
     display: flex;
-
+    justify-content: space-between;
     align-items: center;
 
-    justify-content: center;
+    border-bottom: 1px solid rgba(0, 234, 255, 0.25);
 
+    padding-bottom: 15px;
+
+    z-index: 5;
 }
 
+.system-name {
+    display: flex;
+    flex-direction: column;
+}
 
+.small-text {
+    font-size: 10px;
+    letter-spacing: 4px;
 
-.ring {
+    color: rgba(0, 234, 255, 0.6);
+}
 
-    position: absolute;
+.main-text {
+    font-size: 28px;
+    font-weight: 300;
 
-    border: 2px solid #0ff;
+    letter-spacing: 8px;
+
+    color: var(--cyan);
+
+    text-shadow:
+        0 0 5px var(--cyan),
+        0 0 15px rgba(0, 234, 255, 0.7),
+        0 0 35px rgba(0, 140, 255, 0.5);
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 11px;
+    letter-spacing: 2px;
+
+    color: var(--cyan);
+}
+
+.status-light {
+    width: 8px;
+    height: 8px;
 
     border-radius: 50%;
 
-    box-shadow:
-
-        0 0 15px #0ff,
-
-        inset 0 0 10px rgba(0, 255, 255, 0.5);
-
-}
-
-
-
-.r1 {
-
-    inset: 0;
-
-    border-top-color: transparent;
-
-    border-bottom-color: #0ff;
-
-    animation: spin 3s linear infinite;
-
-}
-
-.r2 {
-
-    inset: 20px;
-
-    border-bottom-color: transparent;
-
-    border-left-color: #0ff;
-
-    animation: spin 2s linear infinite reverse;
-
-}
-
-
-
-.center {
-
-    position: absolute;
-
-    inset: 50px;
-
-    background: #0ff;
-
-    border-radius: 50%;
+    background: var(--cyan);
 
     box-shadow:
+        0 0 5px var(--cyan),
+        0 0 15px var(--cyan);
 
-        0 0 20px #0ff,
-
-        0 0 40px #0ff,
-
-        0 0 70px rgba(0, 255, 255, 0.7);
-
-    animation: pulse 1.5s infinite;
-
+    animation: statusPulse 1.5s infinite;
 }
 
+@keyframes statusPulse {
 
-
-@keyframes spin {
-
-    to {
-
-        transform: rotate(360deg);
-
-    }
-
-}
-
-
-
-@keyframes pulse {
-
-    0% {
-
+    0%,
+    100% {
         opacity: 1;
-
-        transform: scale(1);
-
     }
 
     50% {
-
-        opacity: 0.4;
-
-        transform: scale(0.85);
-
+        opacity: 0.25;
     }
-
-
-
-    100% {
-
-        opacity: 1;
-
-        transform: scale(1);
-
-    }
-
 }
 
 
+/* =========================================================
+   MAIN HUD AREA
+   ========================================================= */
 
-.core-text {
+.hud-area {
+    flex: 1;
 
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    font-size: 11px;
+    gap: 70px;
+
+    position: relative;
+}
+
+
+/* =========================================================
+   HUD SIDE PANELS
+   ========================================================= */
+
+.hud-panel {
+    width: 220px;
+
+    padding: 20px;
+
+    border-left: 1px solid rgba(0, 234, 255, 0.35);
+    border-right: 1px solid rgba(0, 234, 255, 0.15);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 234, 255, 0.03),
+            rgba(0, 100, 180, 0.07)
+        );
+
+    box-shadow:
+        inset 0 0 30px rgba(0, 150, 255, 0.05);
+
+    position: relative;
+}
+
+.hud-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 35px;
+    height: 1px;
+
+    background: var(--cyan);
+
+    box-shadow: 0 0 10px var(--cyan);
+}
+
+.hud-panel::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+    right: 0;
+
+    width: 35px;
+    height: 1px;
+
+    background: var(--cyan);
+
+    box-shadow: 0 0 10px var(--cyan);
+}
+
+.panel-title {
+    color: var(--cyan);
+
+    font-size: 12px;
 
     letter-spacing: 3px;
 
     margin-bottom: 20px;
 
-    text-shadow: 0 0 8px #0ff;
+    text-shadow:
+        0 0 8px rgba(0, 234, 255, 0.7);
+}
 
+.data-line {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid rgba(0, 234, 255, 0.08);
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.data-line span:last-child {
+    color: var(--cyan);
+
+    text-shadow:
+        0 0 8px rgba(0, 234, 255, 0.6);
 }
 
 
+/* =========================================================
+   JARVIS CENTRAL CORE
+   ========================================================= */
 
-.status {
+.jarvis-core {
 
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    width: 360px;
+    height: 360px;
 
-    background: rgba(0, 255, 255, 0.05);
+    position: relative;
 
-    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    margin: 20px 0;
 
+/* Outer rings */
 
+.outer-ring {
+    position: absolute;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(0, 234, 255, 0.35);
 
     box-shadow:
-
-        inset 0 0 15px rgba(0, 255, 255, 0.05),
-
-        0 0 10px rgba(0, 255, 255, 0.05);
-
+        0 0 10px rgba(0, 200, 255, 0.2),
+        inset 0 0 10px rgba(0, 200, 255, 0.08);
 }
 
-.status h2 {
+.ring-one {
+    width: 350px;
+    height: 350px;
 
-    font-size: 12px;
+    border-top-color: var(--cyan);
+    border-bottom-color: transparent;
+
+    animation: rotateClockwise 14s linear infinite;
+}
+
+.ring-two {
+    width: 300px;
+    height: 300px;
+
+    border-left-color: var(--cyan);
+    border-right-color: transparent;
+
+    animation: rotateReverse 9s linear infinite;
+}
+
+.ring-three {
+    width: 250px;
+    height: 250px;
+
+    border-top-color: rgba(0, 234, 255, 0.8);
+    border-bottom-color: rgba(0, 140, 255, 0.4);
+
+    animation: rotateClockwise 6s linear infinite;
+}
+
+@keyframes rotateClockwise {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* =========================================================
+   ENERGY RING
+   ========================================================= */
+
+.energy-ring {
+    position: absolute;
+
+    width: 210px;
+    height: 210px;
+
+    border-radius: 50%;
+
+    animation: rotateClockwise 5s linear infinite;
+}
+
+.energy-segment {
+    position: absolute;
+
+    width: 50px;
+    height: 3px;
+
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 8px var(--cyan),
+        0 0 20px var(--blue);
+}
+
+.segment-one {
+    top: 0;
+    left: 80px;
+}
+
+.segment-two {
+    right: 0;
+    top: 104px;
+}
+
+.segment-three {
+    bottom: 0;
+    left: 80px;
+}
+
+.segment-four {
+    left: 0;
+    top: 104px;
+}
+
+
+/* =========================================================
+   CORE
+   ========================================================= */
+
+.core {
+    width: 130px;
+    height: 130px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(180, 255, 255, 0.95) 0%,
+            rgba(0, 234, 255, 0.65) 18%,
+            rgba(0, 100, 180, 0.35) 45%,
+            rgba(0, 20, 40, 0.8) 70%
+        );
+
+    border: 2px solid var(--cyan);
+
+    box-shadow:
+        0 0 15px var(--cyan),
+        0 0 40px rgba(0, 200, 255, 0.8),
+        0 0 80px rgba(0, 120, 255, 0.5);
+
+    animation: corePulse 2s ease-in-out infinite;
+}
+
+.core-inner {
+    position: absolute;
+
+    width: 75px;
+    height: 75px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    box-shadow:
+        inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.core-text {
+    font-size: 55px;
+
+    font-weight: 200;
+
+    color: white;
+
+    text-shadow:
+        0 0 10px white,
+        0 0 25px var(--cyan),
+        0 0 50px var(--blue);
+
+    z-index: 2;
+}
+
+@keyframes corePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 15px var(--cyan),
+            0 0 40px rgba(0, 200, 255, 0.8),
+            0 0 80px rgba(0, 120, 255, 0.5);
+    }
+
+    50% {
+        transform: scale(1.06);
+
+        box-shadow:
+            0 0 25px var(--cyan),
+            0 0 60px rgba(0, 200, 255, 1),
+            0 0 100px rgba(0, 120, 255, 0.7);
+    }
+}
+
+
+/* =========================================================
+   MESSAGE AREA
+   ========================================================= */
+
+.message-area {
+
+    text-align: center;
+
+    min-height: 75px;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+.message-line {
+
+    width: 280px;
+    height: 1px;
+
+    margin: 0 auto 15px;
+
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 10px var(--cyan);
+}
+
+#jarvisMessage {
+
+    color: var(--cyan);
+
+    font-size: 16px;
+
+    letter-spacing: 4px;
+
+    text-shadow:
+        0 0 8px var(--cyan),
+        0 0 20px rgba(0, 200, 255, 0.5);
+
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.message-sub {
+
+    margin-top: 8px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    color: rgba(180, 240, 255, 0.5);
+}
+
+@keyframes textGlow {
+
+    0%,
+    100% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   VOICE BUTTON
+   ========================================================= */
+
+.voice-section {
+
+    display: flex;
+
+    justify-content: center;
+
+    padding: 15px 0 20px;
+}
+
+.voice-button {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 25px;
+
+    background: rgba(0, 150, 220, 0.08);
+
+    color: var(--cyan);
+
+    border: 1px solid rgba(0, 234, 255, 0.5);
+
+    cursor: pointer;
+
+    font-size: 11px;
 
     letter-spacing: 2px;
 
-    margin-bottom: 8px;
+    transition: 0.3s;
 
+    box-shadow:
+        0 0 15px rgba(0, 200, 255, 0.08);
+}
+
+.voice-button:hover {
+
+    background: rgba(0, 234, 255, 0.15);
+
+    box-shadow:
+        0 0 15px rgba(0, 234, 255, 0.4),
+        0 0 35px rgba(0, 140, 255, 0.2);
+
+    transform: translateY(-2px);
+}
+
+.mic-icon {
+
+    font-size: 18px;
+
+    filter:
+        drop-shadow(0 0 5px var(--cyan));
 }
 
 
+/* =========================================================
+   BOTTOM HUD
+   ========================================================= */
 
-.row {
+.bottom-hud {
 
     display: flex;
 
@@ -260,337 +652,193 @@ header p {
 
     align-items: center;
 
-    gap: 8px;
+    padding-top: 12px;
 
-    font-size: 11px;
+    border-top: 1px solid rgba(0, 234, 255, 0.2);
 
-    margin: 6px 0;
+    font-size: 10px;
 
+    letter-spacing: 2px;
+
+    color: rgba(180, 240, 255, 0.7);
+
+    z-index: 5;
 }
 
-
-
-.row span {
-
-    color: #0ff;
-
-}
-
-
-
-.on {
-
-    color: #0f0;
-
-    text-shadow: 0 0 7px rgba(0, 255, 0, 0.7);
-
-}
-
-
-
-.off {
-
-    color: #f00;
-
-    text-shadow: 0 0 7px rgba(255, 0, 0, 0.7);
-
-}
-
-
-
-.chat {
-
-    border: 1px solid rgba(0, 255, 255, 0.3);
-
-    height: 180px;
-
-    overflow-y: auto;
-
-    padding: 10px;
-
-    font-size: 12px;
-
-
-
-    background: rgba(0, 255, 255, 0.02);
-
-
-
-    box-shadow:
-
-      inset 0 0 15px rgba(0, 255, 255, 0.05);
-
-}
-
-
-
-.chat::-webkit-scrollbar {
-
-    width: 5px;
-
-}
-
-
-
-.chat::-webkit-scrollbar-track {
-
-    background: #000;
-
-}
-
-
-
-.chat::-webkit-scrollbar-thumb {
-
-    background: #0ff;
-
-    box-shadow: 0 0 8px #0ff;
-
-}
-
-
-
-.msg {
-
-    margin: 6px 0;
-
-    padding: 7px;
-
-
-
-    border-left: 2px solid #0ff;
-
-
-
-    background: rgba(0, 255, 255, 0.08);
-
-    line-height: 1.5;
-
-    word-wrap: break-word;
-
-}
-
-
-
-.msg.user {
-
-    border-left-color: #fff;
-
-    color: #fff;
-
-}
-
-
-
-.input-area {
+.bottom-hud > div {
 
     display: flex;
 
-    flex-wrap: wrap;
+    gap: 10px;
+}
 
-    gap: 8px;
+.bottom-label {
 
-    margin-top: 12px;
+    color: rgba(0, 234, 255, 0.45);
+}
 
+#time,
+#date,
+#location {
+
+    color: var(--cyan);
+
+    text-shadow:
+        0 0 6px rgba(0, 234, 255, 0.6);
 }
 
 
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
 
-input {
+@media (max-width: 900px) {
 
-    flex: 1 1 220px;
-
-    min-width: 0;
-
-
-
-    background: #000;
-
-    border: 1px solid #0ff;
-
-
-
-    color: #0ff;
-
-
-
-    padding: 10px;
-
-
-
-    outline: none;
-
-
-
-    font-family: 'Orbitron', sans-serif;
-
-}
-
-
-
-input::placeholder {
-
-    color: rgba(0, 255, 255, 0.5);
-
-}
-
-
-
-input:focus {
-
-    box-shadow:
-
-      0 0 10px rgba(0, 255, 255, 0.5);
-
-}
-
-
-
-button {
-
-    background: #0ff;
-
-    color: #000;
-
-
-
-    border: none;
-
-
-
-    padding: 10px 16px;
-
-
-
-    font-weight: bold;
-
-
-
-    white-space: nowrap;
-
-
-
-    cursor: pointer;
-
-
-
-    font-family: 'Orbitron', sans-serif;
-
-
-
-    transition: 0.2s;
-
-}
-
-
-
-button:hover {
-
-    background: #fff;
-
-
-
-    box-shadow:
-
-        0 0 12px #0ff,
-
-        0 0 25px rgba(0, 255, 255, 0.5);
-
-}
-
-
-
-button:active {
-
-    transform: scale(0.96);
-
-}
-
-
-
-@media (max-width: 600px) {
-
-
-
-    body {
-
-        padding: 12px;
-
+    .jarvis {
+        padding: 18px 15px;
     }
 
-
-
-    header h1 {
-
-        font-size: 25px;
-
-        letter-spacing: 4px;
-
+    .hud-area {
+        gap: 0;
     }
 
+    .hud-panel {
+        display: none;
+    }
 
+    .jarvis-core {
+        width: 330px;
+        height: 330px;
+    }
 
-    header p {
+    .ring-one {
+        width: 320px;
+        height: 320px;
+    }
 
+    .ring-two {
+        width: 275px;
+        height: 275px;
+    }
+
+    .ring-three {
+        width: 230px;
+        height: 230px;
+    }
+
+    .main-text {
+        font-size: 22px;
+        letter-spacing: 5px;
+    }
+
+    .system-status {
+        font-size: 9px;
+    }
+
+    .bottom-hud {
         font-size: 8px;
+    }
+}
 
-        letter-spacing: 3px;
 
+@media (max-width: 500px) {
+
+    .top-hud {
+        padding-bottom: 10px;
     }
 
+    .small-text {
+        font-size: 7px;
+        letter-spacing: 2px;
+    }
 
+    .main-text {
+        font-size: 19px;
+        letter-spacing: 4px;
+    }
+
+    .system-status {
+        font-size: 7px;
+    }
+
+    .jarvis-core {
+        width: 280px;
+        height: 280px;
+    }
+
+    .ring-one {
+        width: 275px;
+        height: 275px;
+    }
+
+    .ring-two {
+        width: 235px;
+        height: 235px;
+    }
+
+    .ring-three {
+        width: 195px;
+        height: 195px;
+    }
+
+    .energy-ring {
+        width: 165px;
+        height: 165px;
+    }
+
+    .segment-one {
+        left: 57px;
+    }
+
+    .segment-two {
+        top: 81px;
+    }
+
+    .segment-three {
+        left: 57px;
+    }
+
+    .segment-four {
+        top: 81px;
+    }
 
     .core {
-
-        width: 145px;
-
-        height: 145px;
-
+        width: 105px;
+        height: 105px;
     }
 
-    .chat {
-
-        height: 170px;
-
+    .core-inner {
+        width: 62px;
+        height: 62px;
     }
 
-
-
-    .input-area input {
-
-        flex: 1 1 100%;
-
-        width: 100%;
-
+    .core-text {
+        font-size: 43px;
     }
 
-
-
-    .input-area button {
-
-        flex: 1 1 auto;
-
-        padding: 10px 8px;
-
-        font-size: 9px;
-
+    #jarvisMessage {
+        font-size: 12px;
+        letter-spacing: 2px;
     }
 
-
-
-    .row {
-
-        font-size: 9px;
-
+    .message-sub {
+        font-size: 7px;
+        letter-spacing: 2px;
     }
 
-
-
-    .status h2 {
-
-        font-size: 10px;
-
+    .bottom-hud {
+        gap: 5px;
     }
 
+    .bottom-hud > div {
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    #location {
+        max-width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
-
