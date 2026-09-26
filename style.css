@@ -1,245 +1,151 @@
-/* ============================================================
-   J.A.R.V.I.S — SAMSUNG A56 MOBILE ONLY
-   PC / DESKTOP LAYOUT REMOVED
-   ============================================================ */
+/* =========================================================
+   J.A.R.V.I.S — SAMSUNG A56 MOBILE HUD
+   MOBILE ONLY DESIGN
+   ========================================================= */
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
-
-:root {
-    --cyan: #00eaff;
-    --blue: #008cff;
-    --deep-black: #02070c;
-    --text: #b8f8ff;
-}
-
-
-/* ============================================================
-   MOBILE SCREEN
-   ============================================================ */
 
 html,
 body {
     width: 100%;
     height: 100%;
-    min-height: 100%;
     overflow: hidden;
+    background: #01070d;
+    color: #00eaff;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-    background: var(--deep-black);
-    color: var(--text);
-
-    font-family: "Segoe UI", Arial, sans-serif;
-
-    margin: 0;
-    padding: 0;
+body {
+    min-height: 100dvh;
 }
 
 
-/* ============================================================
-   BACKGROUND
-   ============================================================ */
+/* =========================================================
+   MAIN JARVIS SCREEN
+   ========================================================= */
 
-body {
+.jarvis {
+    position: relative;
+
+    width: 100%;
+    height: 100dvh;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+        env(safe-area-inset-top, 12px)
+        14px
+        env(safe-area-inset-bottom, 8px)
+        14px;
 
     background:
         radial-gradient(
-            circle at center,
-            rgba(0, 120, 180, 0.22) 0%,
-            rgba(0, 20, 35, 0.45) 35%,
-            #02070c 75%
-        );
+            circle at 50% 42%,
+            rgba(0, 180, 255, 0.12),
+            transparent 32%
+        ),
+        linear-gradient(
+            rgba(0, 170, 255, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 170, 255, 0.035) 1px,
+            transparent 1px
+        ),
+        #01070d;
+
+    background-size:
+        auto,
+        32px 32px,
+        32px 32px,
+        auto;
+}
+
+
+/* =========================================================
+   TOP HUD
+   ========================================================= */
+
+.top-hud {
+    width: 100%;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid rgba(0, 220, 255, 0.35);
+
+    padding: 0 5px;
 
     position: relative;
 }
 
 
-/* HUD GRID */
-
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    background-image:
-
-        linear-gradient(
-            rgba(0, 180, 255, 0.055) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(0, 180, 255, 0.055) 1px,
-            transparent 1px
-        );
-
-    background-size: 35px 35px;
-
-    animation: gridMove 12s linear infinite;
-
-    pointer-events: none;
-
-    z-index: 0;
-}
-
-
-@keyframes gridMove {
-
-    from {
-        background-position: 0 0, 0 0;
-    }
-
-    to {
-        background-position: 35px 35px, 35px 35px;
-    }
-
-}
-
-
-/* ============================================================
-   MAIN JARVIS
-   ============================================================ */
-
-.jarvis {
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100vw;
-    height: 100dvh;
-
-    overflow: hidden;
-
-    padding: 0;
-
-    display: block;
-
-    z-index: 1;
-}
-
-
-/* ============================================================
-   TOP HUD
-   ============================================================ */
-
-.top-hud {
-
-    position: absolute;
-
-    top: 14px;
-    left: 16px;
-    right: 16px;
-
-    height: 58px;
-
-    display: flex;
-
-    align-items: flex-start;
-
-    justify-content: space-between;
-
-    border-bottom:
-        1px solid rgba(0, 234, 255, 0.25);
-
-    padding-bottom: 10px;
-
-    z-index: 50;
-}
-
-
-/* STARK INDUSTRIES */
+/* LEFT TITLE */
 
 .system-name {
-
     display: flex;
-
     flex-direction: column;
-
-    align-items: flex-start;
+    gap: 2px;
 }
-
 
 .small-text {
-
-    font-size: 7px;
-
-    letter-spacing: 2.5px;
-
-    color:
-        rgba(0, 234, 255, 0.55);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(0, 220, 255, 0.55);
 }
 
-
 .main-text {
-
-    margin-top: 3px;
-
-    font-size: 21px;
-
+    font-size: 20px;
     font-weight: 300;
+    letter-spacing: 6px;
 
-    letter-spacing: 5px;
-
-    color: var(--cyan);
+    color: #00eaff;
 
     text-shadow:
-
-        0 0 5px var(--cyan),
-
-        0 0 15px rgba(0, 234, 255, 0.7),
-
-        0 0 30px rgba(0, 140, 255, 0.5);
+        0 0 6px #00eaff,
+        0 0 18px rgba(0, 220, 255, 0.8);
 }
 
 
 /* SYSTEM ONLINE */
 
 .system-status {
-
     display: flex;
-
     align-items: center;
-
     gap: 7px;
 
-    margin-top: 8px;
+    font-size: 8px;
+    letter-spacing: 2px;
 
-    font-size: 7px;
-
-    letter-spacing: 1.5px;
-
-    color: var(--cyan);
-
-    white-space: nowrap;
+    color: #00eaff;
 }
 
-
 .status-light {
-
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
 
     border-radius: 50%;
 
-    background: var(--cyan);
+    background: #00eaff;
 
     box-shadow:
-
-        0 0 5px var(--cyan),
-
-        0 0 15px var(--cyan);
+        0 0 5px #00eaff,
+        0 0 14px #00eaff;
 
     animation: statusPulse 1.5s infinite;
 }
-
 
 @keyframes statusPulse {
 
@@ -249,444 +155,209 @@ body::before {
     }
 
     50% {
-        opacity: 0.25;
+        opacity: 0.35;
     }
-
 }
 
 
-/* ============================================================
+/* =========================================================
    MAIN HUD AREA
-   ============================================================ */
+   ========================================================= */
 
 .hud-area {
+    width: 100%;
 
-    position: absolute;
-
-    top: 78px;
-    left: 0;
-    right: 0;
-
-    height: 48vh;
+    flex: 1;
 
     display: flex;
+    flex-direction: column;
 
     align-items: center;
-
     justify-content: center;
 
-    margin: 0;
-    padding: 0;
+    gap: 20px;
 
-    z-index: 10;
+    min-height: 0;
 }
 
 
-/* ============================================================
-   SIDE PANELS
-   ============================================================ */
-
-.hud-panel {
-
-    position: absolute;
-
-    top: 50%;
-
-    width: 112px;
-
-    padding: 10px 8px;
-
-    transform: translateY(-50%);
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 234, 255, 0.025),
-            rgba(0, 100, 180, 0.08)
-        );
-
-    border-left:
-        1px solid rgba(0, 234, 255, 0.35);
-
-    border-right:
-        1px solid rgba(0, 234, 255, 0.15);
-
-    box-shadow:
-        inset 0 0 20px rgba(0, 150, 255, 0.05);
-
-    z-index: 20;
-}
-
-
-/* LEFT */
-
-.left-panel {
-
-    left: 7px;
-}
-
-
-/* RIGHT */
-
-.right-panel {
-
-    right: 7px;
-}
-
-
-/* PANEL CORNERS */
-
-.hud-panel::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 25px;
-    height: 1px;
-
-    background: var(--cyan);
-
-    box-shadow:
-        0 0 8px var(--cyan);
-}
-
-
-.hud-panel::after {
-
-    content: "";
-
-    position: absolute;
-
-    bottom: 0;
-    right: 0;
-
-    width: 25px;
-    height: 1px;
-
-    background: var(--cyan);
-
-    box-shadow:
-        0 0 8px var(--cyan);
-}
-
-
-/* PANEL TITLE */
-
-.panel-title {
-
-    color: var(--cyan);
-
-    font-size: 7px;
-
-    letter-spacing: 1.5px;
-
-    margin-bottom: 9px;
-
-    text-shadow:
-        0 0 7px rgba(0, 234, 255, 0.7);
-}
-
-
-/* DATA */
-
-.data-line {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 4px;
-
-    padding: 7px 0;
-
-    border-bottom:
-        1px solid rgba(0, 234, 255, 0.08);
-
-    font-size: 6px;
-
-    letter-spacing: 0.5px;
-}
-
-
-.data-line span:last-child {
-
-    color: var(--cyan);
-
-    text-shadow:
-        0 0 7px rgba(0, 234, 255, 0.6);
-
-    text-align: right;
-}
-
-
-/* ============================================================
-   CENTRAL JARVIS CORE
-   ============================================================ */
+/* =========================================================
+   JARVIS CORE
+   ========================================================= */
 
 .jarvis-core {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 205px;
-    height: 205px;
-
-    transform:
-        translate(-50%, -50%);
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    z-index: 15;
-}
-
-
-/* ============================================================
-   OUTER RINGS
-   ============================================================ */
-
-.outer-ring {
-
-    position: absolute;
-
-    border-radius: 50%;
-
-    border:
-        1px solid rgba(0, 234, 255, 0.35);
-
-    box-shadow:
-
-        0 0 10px rgba(0, 200, 255, 0.2),
-
-        inset 0 0 10px rgba(0, 200, 255, 0.08);
-}
-
-
-.ring-one {
-
-    width: 205px;
-    height: 205px;
-
-    border-top-color: var(--cyan);
-
-    border-bottom-color: transparent;
-
-    animation:
-        rotateClockwise 14s linear infinite;
-}
-
-
-.ring-two {
-
-    width: 168px;
-    height: 168px;
-
-    border-left-color: var(--cyan);
-
-    border-right-color: transparent;
-
-    animation:
-        rotateReverse 9s linear infinite;
-}
-
-
-.ring-three {
-
-    width: 135px;
-    height: 135px;
-
-    border-top-color:
-        rgba(0, 234, 255, 0.8);
-
-    border-bottom-color:
-        rgba(0, 140, 255, 0.4);
-
-    animation:
-        rotateClockwise 6s linear infinite;
-}
-
-
-@keyframes rotateClockwise {
-
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-@keyframes rotateReverse {
-
-    from {
-        transform: rotate(360deg);
-    }
-
-    to {
-        transform: rotate(0deg);
-    }
-
-}
-
-
-/* ============================================================
-   ENERGY RING
-   ============================================================ */
-
-.energy-ring {
-
-    position: absolute;
-
-    width: 112px;
-    height: 112px;
-
-    border-radius: 50%;
-
-    animation:
-        rotateClockwise 5s linear infinite;
-}
-
-
-.energy-segment {
-
-    position: absolute;
-
-    width: 28px;
-    height: 2px;
-
-    background: var(--cyan);
-
-    box-shadow:
-
-        0 0 8px var(--cyan),
-
-        0 0 18px var(--blue);
-}
-
-
-.segment-one {
-
-    top: 0;
-    left: 42px;
-}
-
-
-.segment-two {
-
-    right: 0;
-    top: 55px;
-}
-
-
-.segment-three {
-
-    bottom: 0;
-    left: 42px;
-}
-
-
-.segment-four {
-
-    left: 0;
-    top: 55px;
-}
-
-
-/* ============================================================
-   CORE
-   ============================================================ */
-
-.core {
-
-    width: 74px;
-    height: 74px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
     position: relative;
 
-    background:
+    width: 220px;
+    height: 220px;
 
-        radial-gradient(
-            circle,
+    flex-shrink: 0;
 
-            rgba(180, 255, 255, 0.95) 0%,
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-            rgba(0, 234, 255, 0.65) 18%,
 
-            rgba(0, 100, 180, 0.35) 45%,
+/* OUTER RINGS */
 
-            rgba(0, 20, 40, 0.8) 70%
-        );
+.outer-ring {
+    position: absolute;
 
-    border:
-        2px solid var(--cyan);
+    border: 1px solid rgba(0, 220, 255, 0.45);
+
+    border-radius: 50%;
 
     box-shadow:
+        0 0 12px rgba(0, 220, 255, 0.15),
+        inset 0 0 12px rgba(0, 220, 255, 0.08);
+}
 
-        0 0 15px var(--cyan),
+.ring-one {
+    width: 210px;
+    height: 210px;
 
-        0 0 35px rgba(0, 200, 255, 0.8),
+    animation: rotateClockwise 15s linear infinite;
+}
 
-        0 0 65px rgba(0, 120, 255, 0.5);
+.ring-two {
+    width: 185px;
+    height: 185px;
 
-    animation:
-        corePulse 2s ease-in-out infinite;
+    border-style: dashed;
+
+    animation: rotateReverse 12s linear infinite;
+}
+
+.ring-three {
+    width: 160px;
+    height: 160px;
+
+    border-color: rgba(0, 220, 255, 0.65);
+
+    animation: rotateClockwise 9s linear infinite;
+}
+
+
+/* ENERGY RING */
+
+.energy-ring {
+    position: absolute;
+
+    width: 145px;
+    height: 145px;
+
+    border: 2px solid rgba(0, 220, 255, 0.3);
+
+    border-radius: 50%;
+
+    animation: rotateReverse 7s linear infinite;
+}
+
+
+/* ENERGY SEGMENTS */
+
+.energy-segment {
+    position: absolute;
+
+    width: 5px;
+    height: 28px;
+
+    left: 50%;
+    top: -14px;
+
+    transform: translateX(-50%);
+
+    background: #00eaff;
+
+    box-shadow:
+        0 0 8px #00eaff,
+        0 0 18px #00eaff;
+
+    border-radius: 5px;
+}
+
+.segment-one {
+    transform: translateX(-50%) rotate(0deg);
+}
+
+.segment-two {
+    transform: translateX(-50%) rotate(90deg);
+}
+
+.segment-three {
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.segment-four {
+    transform: translateX(-50%) rotate(270deg);
+}
+
+
+/* CORE */
+
+.core {
+    position: relative;
+
+    width: 92px;
+    height: 92px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            #49f5ff 0%,
+            #0089ad 28%,
+            #003d55 55%,
+            #00131e 72%
+        );
+
+    border: 2px solid #00eaff;
+
+    box-shadow:
+        0 0 12px #00eaff,
+        0 0 30px rgba(0, 220, 255, 0.8),
+        inset 0 0 25px rgba(0, 240, 255, 0.8);
+
+    z-index: 5;
+
+    animation: corePulse 2s ease-in-out infinite;
 }
 
 
 .core-inner {
-
     position: absolute;
 
-    width: 48px;
-    height: 48px;
+    width: 65px;
+    height: 65px;
 
     border-radius: 50%;
 
-    border:
-        1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.45);
 
     box-shadow:
-        inset 0 0 20px rgba(255, 255, 255, 0.5);
+        inset 0 0 15px rgba(0, 255, 255, 0.7);
 }
 
 
 .core-text {
+    position: relative;
 
-    font-size: 29px;
-
-    font-weight: 200;
+    font-size: 42px;
+    font-weight: 300;
 
     color: white;
 
     text-shadow:
+        0 0 8px #00eaff,
+        0 0 20px #00eaff;
 
-        0 0 10px white,
-
-        0 0 25px var(--cyan),
-
-        0 0 50px var(--blue);
-
-    z-index: 2;
+    z-index: 10;
 }
 
 
@@ -694,143 +365,218 @@ body::before {
 
     0%,
     100% {
-
         transform: scale(1);
-
         box-shadow:
-
-            0 0 15px var(--cyan),
-
-            0 0 35px rgba(0, 200, 255, 0.8),
-
-            0 0 65px rgba(0, 120, 255, 0.5);
+            0 0 12px #00eaff,
+            0 0 30px rgba(0, 220, 255, 0.8),
+            inset 0 0 25px rgba(0, 240, 255, 0.8);
     }
 
     50% {
-
-        transform: scale(1.06);
-
+        transform: scale(1.05);
         box-shadow:
+            0 0 18px #00eaff,
+            0 0 45px rgba(0, 220, 255, 1),
+            inset 0 0 35px rgba(0, 240, 255, 1);
+    }
+}
 
-            0 0 25px var(--cyan),
 
-            0 0 55px rgba(0, 200, 255, 1),
-
-            0 0 85px rgba(0, 120, 255, 0.7);
+@keyframes rotateClockwise {
+    from {
+        transform: rotate(0deg);
     }
 
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateReverse {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
 }
 
 
-/* ============================================================
-   MESSAGE
-   ============================================================ */
+/* =========================================================
+   SYSTEM + DIAGNOSTICS PANELS
+   ========================================================= */
 
-.message-area {
+.left-panel,
+.right-panel {
+    position: absolute;
 
-    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
 
-    left: 18px;
-    right: 18px;
+    width: 112px;
+    min-height: 128px;
 
-    bottom: 142px;
+    padding: 14px 10px;
 
-    min-height: 55px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 180, 255, 0.09),
+            rgba(0, 40, 60, 0.18)
+        );
 
-    text-align: center;
-
-    z-index: 60;
-}
-
-
-.message-line {
-
-    width: 180px;
-    height: 1px;
-
-    margin: 0 auto 10px;
-
-    background: var(--cyan);
+    border: 1px solid rgba(0, 220, 255, 0.32);
 
     box-shadow:
-        0 0 10px var(--cyan);
+        0 0 12px rgba(0, 220, 255, 0.08),
+        inset 0 0 15px rgba(0, 180, 255, 0.05);
 }
 
 
+/* LEFT */
+
+.left-panel {
+    left: 5px;
+}
+
+
+/* RIGHT */
+
+.right-panel {
+    right: 5px;
+}
+
+
+/* PANEL TITLE */
+
+.panel-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    margin-bottom: 15px;
+
+    color: #00eaff;
+
+    text-shadow:
+        0 0 6px #00eaff;
+}
+
+
+/* DATA */
+
+.data-line {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 11px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.7px;
+
+    white-space: nowrap;
+}
+
+.data-line span:first-child {
+    color: rgba(220, 250, 255, 0.7);
+}
+
+.data-line span:last-child {
+    color: #00eaff;
+
+    font-size: 6.5px;
+
+    text-shadow:
+        0 0 5px #00eaff;
+}
+
+
+/* =========================================================
+   MESSAGE AREA
+   ========================================================= */
+
+.message-area {
+    width: 100%;
+
+    flex-shrink: 0;
+
+    min-height: 65px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    text-align: center;
+}
+
+
+/* TOP LINE */
+
+.message-line {
+    width: 175px;
+    height: 1px;
+
+    background: #00eaff;
+
+    box-shadow:
+        0 0 8px #00eaff,
+        0 0 18px rgba(0, 220, 255, 0.8);
+}
+
+
+/* MAIN MESSAGE */
+
 #jarvisMessage {
+    font-size: 12px;
 
-    color: var(--cyan);
+    font-weight: 500;
 
-    font-size: 11px;
+    letter-spacing: 3px;
+
+    color: #00eaff;
+
+    text-shadow:
+        0 0 6px #00eaff,
+        0 0 15px rgba(0, 220, 255, 0.8);
+
+    max-width: 95%;
+
+    white-space: nowrap;
+}
+
+
+/* SUB MESSAGE */
+
+.message-sub {
+    font-size: 6px;
 
     letter-spacing: 2px;
 
-    line-height: 1.4;
-
-    text-shadow:
-
-        0 0 8px var(--cyan),
-
-        0 0 20px rgba(0, 200, 255, 0.5);
-
-    animation:
-        textGlow 2s ease-in-out infinite;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
+    color: rgba(0, 220, 255, 0.6);
 }
 
 
-.message-sub {
-
-    margin-top: 5px;
-
-    font-size: 6px;
-
-    letter-spacing: 1.5px;
-
-    color:
-        rgba(180, 240, 255, 0.5);
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-@keyframes textGlow {
-
-    0%,
-    100% {
-        opacity: 0.8;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-}
-
-
-/* ============================================================
+/* =========================================================
    VOICE BUTTON
-   ============================================================ */
+   ========================================================= */
 
 .voice-section {
-
     position: fixed;
 
     left: 50%;
 
-    bottom: 70px;
+    bottom: calc(
+        48px + env(safe-area-inset-bottom, 0px)
+    );
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     width: 100%;
 
@@ -838,14 +584,17 @@ body::before {
 
     justify-content: center;
 
-    z-index: 100;
+    z-index: 999999;
+
+    pointer-events: none;
 }
 
 
 .voice-button {
+    pointer-events: auto;
 
-    width: 220px;
-    height: 48px;
+    width: 225px;
+    height: 54px;
 
     display: flex;
 
@@ -854,143 +603,92 @@ body::before {
 
     gap: 10px;
 
-    padding: 0 15px;
+    border: 1px solid #00eaff;
 
-    border-radius: 28px;
+    border-radius: 30px;
 
     background:
-        rgba(0, 150, 220, 0.10);
+        linear-gradient(
+            180deg,
+            rgba(0, 220, 255, 0.16),
+            rgba(0, 80, 110, 0.25)
+        );
 
-    color: var(--cyan);
+    color: #00eaff;
 
-    border:
-        1px solid rgba(0, 234, 255, 0.65);
-
-    box-shadow:
-
-        0 0 12px rgba(0, 200, 255, 0.25),
-
-        inset 0 0 12px rgba(0, 200, 255, 0.05);
-
-    font-size: 9px;
+    font-size: 10px;
 
     letter-spacing: 2px;
 
+    box-shadow:
+        0 0 10px rgba(0, 220, 255, 0.5),
+        inset 0 0 15px rgba(0, 220, 255, 0.12);
+
+    text-shadow:
+        0 0 7px #00eaff;
+
+    -webkit-tap-highlight-color: transparent;
+
     cursor: pointer;
 
-    -webkit-tap-highlight-color:
-        transparent;
-
-    touch-action: manipulation;
+    transition: 0.2s ease;
 }
 
 
-.voice-button:active {
-
-    transform: scale(0.96);
+.voice-button:active,
+.voice-button.active {
+    transform: scale(0.95);
 
     background:
-        rgba(0, 234, 255, 0.18);
+        rgba(0, 220, 255, 0.3);
 
     box-shadow:
-
-        0 0 20px rgba(0, 234, 255, 0.6),
-
-        0 0 40px rgba(0, 140, 255, 0.3);
-}
-
-
-.voice-button.active {
-
-    animation:
-        voiceButtonPulse 1s infinite;
+        0 0 15px #00eaff,
+        0 0 35px rgba(0, 220, 255, 0.8),
+        inset 0 0 25px rgba(0, 220, 255, 0.25);
 }
 
 
 .mic-icon {
-
-    display: inline-block;
-
     font-size: 18px;
 
     filter:
-        drop-shadow(0 0 5px var(--cyan));
+        drop-shadow(0 0 5px #00eaff);
 }
 
 
 .voice-text {
-
     font-size: 9px;
 
-    white-space: nowrap;
+    letter-spacing: 2px;
 }
 
 
-@keyframes voiceButtonPulse {
-
-    0% {
-
-        box-shadow:
-            0 0 10px rgba(0, 220, 255, 0.4);
-
-    }
-
-    50% {
-
-        box-shadow:
-            0 0 30px rgba(0, 220, 255, 0.9);
-
-    }
-
-    100% {
-
-        box-shadow:
-            0 0 10px rgba(0, 220, 255, 0.4);
-
-    }
-
-}
-
-
-/* ============================================================
+/* =========================================================
    BOTTOM HUD
-   ============================================================ */
+   ========================================================= */
 
 .bottom-hud {
+    width: 100%;
 
-    position: fixed;
+    height: 38px;
 
-    left: 12px;
-    right: 12px;
-
-    bottom: 10px;
-
-    height: 40px;
+    flex-shrink: 0;
 
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
-    border-top:
-        1px solid rgba(0, 234, 255, 0.2);
+    padding: 0 7px;
 
-    padding-top: 7px;
+    border-top: 1px solid rgba(0, 220, 255, 0.25);
 
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-    color:
-        rgba(180, 240, 255, 0.7);
-
-    z-index: 80;
+    color: #00eaff;
 }
 
 
 .bottom-hud > div {
-
     display: flex;
 
     flex-direction: column;
@@ -998,309 +696,107 @@ body::before {
     align-items: center;
 
     gap: 3px;
-
-    min-width: 70px;
 }
 
 
 .bottom-label {
+    font-size: 5px;
 
-    color:
-        rgba(0, 234, 255, 0.45);
+    letter-spacing: 2px;
 
-    font-size: 6px;
-
-    letter-spacing: 1.5px;
+    color: rgba(0, 220, 255, 0.45);
 }
 
 
 #time,
 #date,
 #location {
+    font-size: 7px;
 
-    color: var(--cyan);
+    letter-spacing: 1px;
 
-    font-size: 8px;
-
-    letter-spacing: 0.7px;
+    color: #00eaff;
 
     text-shadow:
-        0 0 6px rgba(0, 234, 255, 0.6);
-
-    max-width: 100px;
-
-    overflow: hidden;
+        0 0 5px #00eaff;
 
     white-space: nowrap;
-
-    text-overflow: ellipsis;
 }
 
 
-/* ============================================================
-   SAMSUNG A56 PORTRAIT OPTIMIZATION
-   ============================================================ */
+/* =========================================================
+   SMALL SAMSUNG MOBILE
+   ========================================================= */
 
-@media (max-width: 430px) and (orientation: portrait) {
+@media (max-height: 700px) {
 
     .top-hud {
-
-        top: 12px;
-
-        left: 14px;
-        right: 14px;
+        height: 50px;
     }
 
-
-    .main-text {
-
-        font-size: 20px;
-
-        letter-spacing: 4px;
+    .jarvis-core {
+        width: 185px;
+        height: 185px;
     }
 
-
-    .system-status {
-
-        font-size: 6.5px;
+    .ring-one {
+        width: 175px;
+        height: 175px;
     }
 
-
-    .hud-area {
-
-        top: 72px;
-
-        height: 48vh;
+    .ring-two {
+        width: 155px;
+        height: 155px;
     }
 
-
-    .hud-panel {
-
-        width: 108px;
-
-        padding: 9px 7px;
+    .ring-three {
+        width: 135px;
+        height: 135px;
     }
 
-
-    .left-panel {
-
-        left: 5px;
+    .energy-ring {
+        width: 120px;
+        height: 120px;
     }
 
+    .core {
+        width: 78px;
+        height: 78px;
+    }
 
+    .core-inner {
+        width: 55px;
+        height: 55px;
+    }
+
+    .core-text {
+        font-size: 35px;
+    }
+
+    .left-panel,
     .right-panel {
-
-        right: 5px;
+        min-height: 112px;
+        width: 102px;
     }
-
-
-    .jarvis-core {
-
-        width: 195px;
-
-        height: 195px;
-    }
-
-
-    .ring-one {
-
-        width: 195px;
-
-        height: 195px;
-    }
-
-
-    .ring-two {
-
-        width: 160px;
-
-        height: 160px;
-    }
-
-
-    .ring-three {
-
-        width: 128px;
-
-        height: 128px;
-    }
-
 
     .message-area {
-
-        bottom: 140px;
+        min-height: 55px;
     }
-
-
-    .voice-section {
-
-        bottom: 67px;
-    }
-
 
     .voice-button {
-
-        width: 215px;
-
-        height: 48px;
+        height: 50px;
     }
-
-
-    .bottom-hud {
-
-        bottom: 8px;
-    }
-
 }
 
 
-/* ============================================================
-   VERY SMALL MOBILE
-   ============================================================ */
+/* =========================================================
+   HIDE SCROLLBARS
+   ========================================================= */
 
-@media (max-width: 360px) {
-
-    .hud-panel {
-
-        width: 92px;
-
-        padding: 8px 5px;
-    }
-
-
-    .panel-title {
-
-        font-size: 6px;
-
-        letter-spacing: 1px;
-    }
-
-
-    .data-line {
-
-        font-size: 5.5px;
-
-        padding: 6px 0;
-    }
-
-
-    .jarvis-core {
-
-        width: 175px;
-
-        height: 175px;
-    }
-
-
-    .ring-one {
-
-        width: 175px;
-
-        height: 175px;
-    }
-
-
-    .ring-two {
-
-        width: 145px;
-
-        height: 145px;
-    }
-
-
-    .ring-three {
-
-        width: 115px;
-
-        height: 115px;
-    }
-
-
-    .voice-button {
-
-        width: 200px;
-
-        height: 46px;
-    }
-
+::-webkit-scrollbar {
+    display: none;
 }
 
-
-/* ============================================================
-   LANDSCAPE MOBILE
-   ============================================================ */
-
-@media (max-height: 500px) and (orientation: landscape) {
-
-    .top-hud {
-
-        top: 7px;
-
-        height: 40px;
-    }
-
-
-    .main-text {
-
-        font-size: 16px;
-    }
-
-
-    .hud-area {
-
-        top: 48px;
-
-        height: 55vh;
-    }
-
-
-    .jarvis-core {
-
-        width: 150px;
-
-        height: 150px;
-    }
-
-
-    .ring-one {
-
-        width: 150px;
-
-        height: 150px;
-    }
-
-
-    .ring-two {
-
-        width: 125px;
-
-        height: 125px;
-    }
-
-
-    .ring-three {
-
-        width: 100px;
-
-        height: 100px;
-    }
-
-
-    .message-area {
-
-        bottom: 82px;
-    }
-
-
-    .voice-section {
-
-        bottom: 25px;
-    }
-
-
-    .bottom-hud {
-
-        display: none;
-    }
-
+* {
+    scrollbar-width: none;
 }
