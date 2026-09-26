@@ -1,0 +1,1282 @@
+/* =========================================================
+   J.A.R.V.I.S
+   SAMSUNG A56 MOBILE HUD
+   ========================================================= */
+
+@import url(
+    'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap'
+);
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: 'Orbitron', sans-serif;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+html,
+body {
+
+    width: 100%;
+
+    min-height: 100%;
+
+}
+
+
+body {
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(0, 255, 255, 0.13),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            rgba(0, 255, 255, 0.025) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(0, 255, 255, 0.025) 1px,
+            transparent 1px
+        ),
+
+        #01070c;
+
+    background-size:
+        auto,
+        28px 28px,
+        28px 28px;
+
+    color: #00ffff;
+
+    padding: 12px;
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.jarvis-header {
+
+    width: 100%;
+
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid rgba(0, 255, 255, 0.3);
+
+    padding-bottom: 12px;
+
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo-mark {
+
+    position: relative;
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.logo-circle {
+
+    width: 44px;
+
+    height: 44px;
+
+    border:
+
+        2px solid #00ffff;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+
+        0 0 8px #00ffff,
+
+        0 0 20px rgba(0, 255, 255, 0.6),
+
+        inset 0 0 12px rgba(0, 255, 255, 0.4);
+
+}
+
+
+.logo-circle::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 52px;
+
+    height: 52px;
+
+    border:
+
+        1px dashed rgba(0, 255, 255, 0.7);
+
+    border-radius: 50%;
+
+    animation:
+        logoSpin 8s linear infinite;
+
+}
+
+
+.logo-j {
+
+    font-size: 25px;
+
+    color: white;
+
+    text-shadow:
+
+        0 0 6px #00ffff,
+
+        0 0 15px #00ffff;
+
+}
+
+
+.logo-lines {
+
+    position: absolute;
+
+    bottom: -4px;
+
+    left: 2px;
+
+    width: 48px;
+
+    height: 1px;
+
+    background: #00ffff;
+
+    box-shadow:
+
+        0 0 8px #00ffff;
+
+}
+
+
+@keyframes logoSpin {
+
+    from {
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+
+    flex: 1;
+
+    padding-left: 8px;
+
+}
+
+
+.brand h1 {
+
+    font-size: 20px;
+
+    letter-spacing: 5px;
+
+    color: #00ffff;
+
+    text-shadow:
+
+        0 0 8px #00ffff,
+
+        0 0 20px rgba(0, 255, 255, 0.7);
+
+}
+
+
+.brand p {
+
+    margin-top: 4px;
+
+    font-size: 6px;
+
+    letter-spacing: 1.5px;
+
+    color:
+
+        rgba(0, 255, 255, 0.55);
+
+}
+
+
+/* =========================================================
+   ONLINE
+   ========================================================= */
+
+.system-online {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 6px;
+
+    letter-spacing: 1px;
+
+    color: #00ffff;
+
+}
+
+
+.online-dot {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #00ffff;
+
+    box-shadow:
+
+        0 0 6px #00ffff,
+
+        0 0 14px #00ffff;
+
+    animation:
+        onlinePulse 1.5s infinite;
+
+}
+
+
+@keyframes onlinePulse {
+
+    0%,
+    100% {
+
+        opacity: 1;
+
+    }
+
+    50% {
+
+        opacity: 0.25;
+
+    }
+
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
+}
+
+
+/* =========================================================
+   JARVIS CORE
+   ========================================================= */
+
+.core {
+
+    position: relative;
+
+    width: 230px;
+
+    height: 230px;
+
+    margin:
+
+        25px auto 5px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* =========================================================
+   RINGS
+   ========================================================= */
+
+.ring {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+
+        1px solid rgba(0, 255, 255, 0.65);
+
+    box-shadow:
+
+        0 0 12px rgba(0, 255, 255, 0.3),
+
+        inset 0 0 12px rgba(0, 255, 255, 0.15);
+
+}
+
+
+.r1 {
+
+    inset: 0;
+
+    border-top-color: transparent;
+
+    border-right-color: #00ffff;
+
+    border-bottom-color: #00ffff;
+
+    animation:
+
+        spin 7s linear infinite;
+
+}
+
+
+.r2 {
+
+    inset: 20px;
+
+    border-left-color: #00ffff;
+
+    border-bottom-color: transparent;
+
+    animation:
+
+        spin 4s linear infinite reverse;
+
+}
+
+
+.r3 {
+
+    inset: 42px;
+
+    border:
+
+        2px dashed rgba(0, 255, 255, 0.7);
+
+    animation:
+
+        spin 9s linear infinite;
+
+}
+
+
+/* =========================================================
+   ENERGY MARKERS
+   ========================================================= */
+
+.energy {
+
+    position: absolute;
+
+    width: 5px;
+
+    height: 28px;
+
+    background: #00ffff;
+
+    border-radius: 5px;
+
+    box-shadow:
+
+        0 0 8px #00ffff,
+
+        0 0 18px #00ffff;
+
+}
+
+
+.e1 {
+
+    top: 4px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+}
+
+
+.e2 {
+
+    right: 8px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        rotate(90deg);
+
+}
+
+
+.e3 {
+
+    bottom: 4px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%)
+        rotate(180deg);
+
+}
+
+
+.e4 {
+
+    left: 8px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        rotate(90deg);
+
+}
+
+
+/* =========================================================
+   CENTER JARVIS LOGO
+   ========================================================= */
+
+.center {
+
+    position: absolute;
+
+    width: 92px;
+
+    height: 92px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+
+        radial-gradient(
+            circle,
+            #8fffff 0%,
+            #00b9d0 20%,
+            #00667a 43%,
+            #00202d 68%,
+            #000b12 100%
+        );
+
+    border:
+
+        2px solid #00ffff;
+
+    box-shadow:
+
+        0 0 10px #00ffff,
+
+        0 0 25px #00ffff,
+
+        0 0 50px rgba(0, 255, 255, 0.8),
+
+        inset 0 0 25px #00ffff;
+
+    animation:
+
+        corePulse 2s ease-in-out infinite;
+
+}
+
+
+.center-inner {
+
+    width: 66px;
+
+    height: 66px;
+
+    border-radius: 50%;
+
+    border:
+
+        1px solid rgba(255, 255, 255, 0.6);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+
+        inset 0 0 15px #00ffff;
+
+}
+
+
+.center-j {
+
+    font-size: 35px;
+
+    color: white;
+
+    line-height: 32px;
+
+    text-shadow:
+
+        0 0 7px #00ffff,
+
+        0 0 20px #00ffff;
+
+}
+
+
+.center-label {
+
+    margin-top: 2px;
+
+    font-size: 6px;
+
+    letter-spacing: 3px;
+
+    color: #ffffff;
+
+}
+
+
+@keyframes corePulse {
+
+    0%,
+    100% {
+
+        transform: scale(1);
+
+    }
+
+    50% {
+
+        transform: scale(1.07);
+
+    }
+
+}
+
+
+@keyframes spin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =========================================================
+   CORE TEXT
+   ========================================================= */
+
+.core-text {
+
+    text-align: center;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+
+    color: #00ffff;
+
+    text-shadow:
+
+        0 0 8px #00ffff;
+
+}
+
+
+.core-status {
+
+    text-align: center;
+
+    margin-top: 5px;
+
+    font-size: 7px;
+
+    letter-spacing: 3px;
+
+    color:
+
+        rgba(0, 255, 255, 0.55);
+
+}
+
+
+/* =========================================================
+   DIAGNOSTICS
+   ========================================================= */
+
+.status {
+
+    margin:
+
+        18px 0;
+
+    padding: 15px;
+
+    border:
+
+        1px solid rgba(0, 255, 255, 0.35);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(0, 255, 255, 0.08),
+            rgba(0, 50, 70, 0.08)
+        );
+
+    box-shadow:
+
+        inset 0 0 18px
+        rgba(0, 255, 255, 0.04),
+
+        0 0 12px
+        rgba(0, 255, 255, 0.05);
+
+}
+
+
+.status-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding-bottom: 8px;
+
+    margin-bottom: 6px;
+
+    border-bottom:
+
+        1px solid rgba(0, 255, 255, 0.15);
+
+}
+
+
+.status-title {
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.status-code {
+
+    font-size: 6px;
+
+    color:
+
+        rgba(0, 255, 255, 0.5);
+
+}
+
+
+.row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 10px 0;
+
+    font-size: 9px;
+
+}
+
+
+.row span {
+
+    color:
+
+        rgba(0, 255, 255, 0.75);
+
+}
+
+
+.on {
+
+    color: #00ff88;
+
+    font-size: 8px;
+
+    text-shadow:
+
+        0 0 7px rgba(0, 255, 120, 0.8);
+
+}
+
+
+.off {
+
+    color: #ff3030;
+
+}
+
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+.chat {
+
+    width: 100%;
+
+    height: 170px;
+
+    overflow-y: auto;
+
+    padding: 10px;
+
+    border:
+
+        1px solid rgba(0, 255, 255, 0.3);
+
+    background:
+
+        rgba(0, 255, 255, 0.025);
+
+    box-shadow:
+
+        inset 0 0 15px
+        rgba(0, 255, 255, 0.04);
+
+    font-size: 10px;
+
+}
+
+
+.chat::-webkit-scrollbar {
+
+    width: 3px;
+
+}
+
+
+.chat::-webkit-scrollbar-thumb {
+
+    background: #00ffff;
+
+    box-shadow: 0 0 8px #00ffff;
+
+}
+
+
+/* CHAT MESSAGE */
+
+.msg {
+
+    margin: 6px 0;
+
+    padding: 8px;
+
+    border-left:
+
+        2px solid #00ffff;
+
+    background:
+
+        rgba(0, 255, 255, 0.07);
+
+    line-height: 1.5;
+
+    word-wrap: break-word;
+
+}
+
+
+.msg.user {
+
+    border-left-color: white;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   INPUT AREA
+   ========================================================= */
+
+.input-area {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 12px;
+
+    padding-bottom: 15px;
+
+}
+
+
+/* INPUT */
+
+input {
+
+    flex:
+
+        1 1 100%;
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 46px;
+
+    padding: 10px;
+
+    background:
+
+        rgba(0, 0, 0, 0.75);
+
+    border:
+
+        1px solid #00ffff;
+
+    color: #00ffff;
+
+    outline: none;
+
+    font-family:
+        'Orbitron',
+        sans-serif;
+
+    font-size: 10px;
+
+}
+
+
+input::placeholder {
+
+    color:
+
+        rgba(0, 255, 255, 0.45);
+
+}
+
+
+input:focus {
+
+    box-shadow:
+
+        0 0 12px
+        rgba(0, 255, 255, 0.5);
+
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button {
+
+    border: none;
+
+    font-family:
+        'Orbitron',
+        sans-serif;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.execute-btn {
+
+    flex: 1;
+
+    height: 45px;
+
+    background: #00ffff;
+
+    color: #000;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+.icon-btn {
+
+    width: 48px;
+
+    height: 45px;
+
+    background:
+
+        rgba(0, 255, 255, 0.12);
+
+    border:
+
+        1px solid #00ffff;
+
+    color: #00ffff;
+
+    font-size: 18px;
+
+}
+
+
+.clear-btn {
+
+    width: 100%;
+
+    height: 38px;
+
+    background:
+
+        rgba(0, 255, 255, 0.04);
+
+    border:
+
+        1px solid rgba(0, 255, 255, 0.45);
+
+    color:
+
+        rgba(0, 255, 255, 0.7);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+}
+
+
+button:hover {
+
+    background: #ffffff;
+
+    color: #000;
+
+    box-shadow:
+
+        0 0 12px #00ffff,
+
+        0 0 25px
+        rgba(0, 255, 255, 0.5);
+
+}
+
+
+button:active {
+
+    transform:
+        scale(0.95);
+
+}
+
+
+/* =========================================================
+   SAMSUNG A56 SCREEN
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding:
+
+            10px
+            10px
+            20px;
+
+    }
+
+
+    .jarvis-header {
+
+        min-height: 65px;
+
+    }
+
+
+    .logo-mark {
+
+        width: 46px;
+
+        height: 46px;
+
+    }
+
+
+    .logo-circle {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+
+    .logo-circle::before {
+
+        width: 46px;
+
+        height: 46px;
+
+    }
+
+
+    .logo-j {
+
+        font-size: 21px;
+
+    }
+
+
+    .brand h1 {
+
+        font-size: 18px;
+
+        letter-spacing: 4px;
+
+    }
+
+
+    .brand p {
+
+        font-size: 5px;
+
+        letter-spacing: 1px;
+
+    }
+
+
+    .system-online {
+
+        font-size: 5px;
+
+    }
+
+
+    .core {
+
+        width: 210px;
+
+        height: 210px;
+
+        margin-top: 20px;
+
+    }
+
+
+    .status {
+
+        margin-top: 15px;
+
+    }
+
+
+    .chat {
+
+        height: 145px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREEN
+   ========================================================= */
+
+@media (max-height: 700px) {
+
+    .core {
+
+        width: 175px;
+
+        height: 175px;
+
+        margin-top: 12px;
+
+    }
+
+
+    .r2 {
+
+        inset: 16px;
+
+    }
+
+
+    .r3 {
+
+        inset: 32px;
+
+    }
+
+
+    .center {
+
+        width: 76px;
+
+        height: 76px;
+
+    }
+
+
+    .center-inner {
+
+        width: 55px;
+
+        height: 55px;
+
+    }
+
+
+    .center-j {
+
+        font-size: 29px;
+
+    }
+
+
+    .status {
+
+        margin: 10px 0;
+
+        padding: 10px;
+
+    }
+
+
+    .row {
+
+        margin: 7px 0;
+
+    }
+
+
+    .chat {
+
+        height: 115px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+
+    width: 0;
+
+    height: 0;
+
+}

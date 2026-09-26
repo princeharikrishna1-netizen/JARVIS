@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>J.A.R.V.I.S</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         J.A.R.V.I.S HEADER
+         ===================================================== -->
+
+    <header class="jarvis-header">
+
+        <div class="logo-mark">
+
+            <div class="logo-circle">
+
+                <div class="logo-j">
+                    J
+                </div>
+
+            </div>
+
+            <div class="logo-lines"></div>
+
+        </div>
+
+
+        <div class="brand">
+
+            <h1>J.A.R.V.I.S</h1>
+
+            <p>
+                JUST A RATHER VERY INTELLIGENT SYSTEM
+            </p>
+
+        </div>
+
+
+        <div class="system-online">
+
+            <span class="online-dot"></span>
+
+            <span>
+                SYSTEM ONLINE
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN JARVIS CORE
+         ===================================================== -->
+
+    <main>
+
+        <div class="core">
+
+            <!-- OUTER ROTATING RINGS -->
+
+            <div class="ring r1"></div>
+
+            <div class="ring r2"></div>
+
+            <div class="ring r3"></div>
+
+
+            <!-- ENERGY MARKERS -->
+
+            <div class="energy e1"></div>
+
+            <div class="energy e2"></div>
+
+            <div class="energy e3"></div>
+
+            <div class="energy e4"></div>
+
+
+            <!-- CENTER LOGO -->
+
+            <div class="center">
+
+    <div class="center-inner"></div>
+
+</div>
+
+            </div>
+
+        </div>
+
+
+        <p class="core-text">
+            J.A.R.V.I.S CORE
+        </p>
+
+        <p class="core-status">
+            SYSTEM READY
+        </p>
+
+
+
+        <!-- =================================================
+             SYSTEM DIAGNOSTICS
+             ================================================= -->
+
+        <div class="status">
+
+            <div class="status-header">
+
+                <span class="status-title">
+                    SYSTEM DIAGNOSTICS
+                </span>
+
+                <span class="status-code">
+                    07.26
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    AI ENGINE
+                </span>
+
+                <b class="on">
+                    ● OPERATIONAL
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    CONNECTION
+                </span>
+
+                <b class="on">
+                    ● ONLINE
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    VOICE INTERFACE
+                </span>
+
+                <b class="on">
+                    ● READY
+                </b>
+
+            </div>
+
+
+            <div class="row">
+
+                <span>
+                    LONG-TERM MEMORY
+                </span>
+
+                <b class="on">
+                    ● ACTIVE
+                </b>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHAT
+             ================================================= -->
+
+        <div
+            class="chat"
+            id="chat"
+        ></div>
+
+
+
+        <!-- =================================================
+             COMMAND AREA
+             ================================================= -->
+
+        <div class="input-area">
+
+            <input
+                id="msg"
+                type="text"
+                placeholder="Enter a command for J.A.R.V.I.S..."
+                autocomplete="off"
+            >
+
+
+            <button
+                id="send"
+                class="execute-btn"
+            >
+                EXECUTE
+            </button>
+
+
+            <button
+                id="mic-btn"
+                class="icon-btn"
+                aria-label="Activate voice input"
+            >
+                🎙
+            </button>
+
+
+            <button
+                id="cam-btn"
+                class="icon-btn"
+                aria-label="Analyze image"
+            >
+                📷
+            </button>
+
+
+            <button
+                id="clear-btn"
+                class="clear-btn"
+            >
+                CLEAR MEMORY
+            </button>
+
+
+            <input
+                id="img-input"
+                type="file"
+                accept="image/*"
+                style="display:none"
+            >
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
