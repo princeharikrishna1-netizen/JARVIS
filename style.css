@@ -1,6 +1,7 @@
-/* =========================================================
-   J.A.R.V.I.S — 3D HUD INTERFACE
-   ========================================================= */
+/* ============================================================
+   J.A.R.V.I.S — SAMSUNG A56 MOBILE ONLY
+   PC / DESKTOP LAYOUT REMOVED
+   ============================================================ */
 
 * {
     margin: 0;
@@ -11,63 +12,82 @@
 :root {
     --cyan: #00eaff;
     --blue: #008cff;
-    --dark-blue: #001b2b;
     --deep-black: #02070c;
     --text: #b8f8ff;
 }
+
+
+/* ============================================================
+   MOBILE SCREEN
+   ============================================================ */
 
 html,
 body {
     width: 100%;
     height: 100%;
+    min-height: 100%;
     overflow: hidden;
+
     background: var(--deep-black);
     color: var(--text);
+
     font-family: "Segoe UI", Arial, sans-serif;
+
+    margin: 0;
+    padding: 0;
 }
 
 
-/* =========================================================
-   MAIN BACKGROUND
-   ========================================================= */
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
 
 body {
+
     background:
         radial-gradient(
             circle at center,
-            rgba(0, 120, 180, 0.18) 0%,
-            rgba(0, 20, 35, 0.35) 25%,
-            #02070c 65%
+            rgba(0, 120, 180, 0.22) 0%,
+            rgba(0, 20, 35, 0.45) 35%,
+            #02070c 75%
         );
 
     position: relative;
 }
 
 
-/* Moving grid */
+/* HUD GRID */
 
 body::before {
+
     content: "";
+
     position: fixed;
+
     inset: 0;
 
     background-image:
+
         linear-gradient(
-            rgba(0, 180, 255, 0.06) 1px,
+            rgba(0, 180, 255, 0.055) 1px,
             transparent 1px
         ),
+
         linear-gradient(
             90deg,
-            rgba(0, 180, 255, 0.06) 1px,
+            rgba(0, 180, 255, 0.055) 1px,
             transparent 1px
         );
 
-    background-size: 45px 45px;
+    background-size: 35px 35px;
 
     animation: gridMove 12s linear infinite;
 
     pointer-events: none;
+
+    z-index: 0;
 }
+
 
 @keyframes gridMove {
 
@@ -76,99 +96,150 @@ body::before {
     }
 
     to {
-        background-position: 45px 45px, 45px 45px;
+        background-position: 35px 35px, 35px 35px;
     }
+
 }
 
 
-/* =========================================================
+/* ============================================================
    MAIN JARVIS
-   ========================================================= */
+   ============================================================ */
 
 .jarvis {
-    width: 100%;
-    height: 100vh;
 
-    display: flex;
-    flex-direction: column;
+    position: fixed;
 
-    position: relative;
+    top: 0;
+    left: 0;
 
-    padding: 25px 35px;
+    width: 100vw;
+    height: 100dvh;
 
     overflow: hidden;
+
+    padding: 0;
+
+    display: block;
+
+    z-index: 1;
 }
 
 
-/* =========================================================
+/* ============================================================
    TOP HUD
-   ========================================================= */
+   ============================================================ */
 
 .top-hud {
-    width: 100%;
+
+    position: absolute;
+
+    top: 14px;
+    left: 16px;
+    right: 16px;
+
+    height: 58px;
 
     display: flex;
+
+    align-items: flex-start;
+
     justify-content: space-between;
-    align-items: center;
 
-    border-bottom: 1px solid rgba(0, 234, 255, 0.25);
+    border-bottom:
+        1px solid rgba(0, 234, 255, 0.25);
 
-    padding-bottom: 15px;
+    padding-bottom: 10px;
 
-    z-index: 5;
+    z-index: 50;
 }
+
+
+/* STARK INDUSTRIES */
 
 .system-name {
+
     display: flex;
+
     flex-direction: column;
+
+    align-items: flex-start;
 }
+
 
 .small-text {
-    font-size: 10px;
-    letter-spacing: 4px;
 
-    color: rgba(0, 234, 255, 0.6);
+    font-size: 7px;
+
+    letter-spacing: 2.5px;
+
+    color:
+        rgba(0, 234, 255, 0.55);
 }
 
+
 .main-text {
-    font-size: 28px;
+
+    margin-top: 3px;
+
+    font-size: 21px;
+
     font-weight: 300;
 
-    letter-spacing: 8px;
+    letter-spacing: 5px;
 
     color: var(--cyan);
 
     text-shadow:
+
         0 0 5px var(--cyan),
+
         0 0 15px rgba(0, 234, 255, 0.7),
-        0 0 35px rgba(0, 140, 255, 0.5);
+
+        0 0 30px rgba(0, 140, 255, 0.5);
 }
+
+
+/* SYSTEM ONLINE */
 
 .system-status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 
-    font-size: 11px;
-    letter-spacing: 2px;
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 8px;
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
 
     color: var(--cyan);
+
+    white-space: nowrap;
 }
 
+
 .status-light {
-    width: 8px;
-    height: 8px;
+
+    width: 6px;
+    height: 6px;
 
     border-radius: 50%;
 
     background: var(--cyan);
 
     box-shadow:
+
         0 0 5px var(--cyan),
+
         0 0 15px var(--cyan);
 
     animation: statusPulse 1.5s infinite;
 }
+
 
 @keyframes statusPulse {
 
@@ -180,52 +251,93 @@ body::before {
     50% {
         opacity: 0.25;
     }
+
 }
 
 
-/* =========================================================
+/* ============================================================
    MAIN HUD AREA
-   ========================================================= */
+   ============================================================ */
 
 .hud-area {
-    flex: 1;
+
+    position: absolute;
+
+    top: 78px;
+    left: 0;
+    right: 0;
+
+    height: 48vh;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    gap: 70px;
+    margin: 0;
+    padding: 0;
 
-    position: relative;
+    z-index: 10;
 }
 
 
-/* =========================================================
-   HUD SIDE PANELS
-   ========================================================= */
+/* ============================================================
+   SIDE PANELS
+   ============================================================ */
 
 .hud-panel {
-    width: 220px;
 
-    padding: 20px;
+    position: absolute;
 
-    border-left: 1px solid rgba(0, 234, 255, 0.35);
-    border-right: 1px solid rgba(0, 234, 255, 0.15);
+    top: 50%;
+
+    width: 112px;
+
+    padding: 10px 8px;
+
+    transform: translateY(-50%);
 
     background:
         linear-gradient(
             90deg,
-            rgba(0, 234, 255, 0.03),
-            rgba(0, 100, 180, 0.07)
+            rgba(0, 234, 255, 0.025),
+            rgba(0, 100, 180, 0.08)
         );
 
-    box-shadow:
-        inset 0 0 30px rgba(0, 150, 255, 0.05);
+    border-left:
+        1px solid rgba(0, 234, 255, 0.35);
 
-    position: relative;
+    border-right:
+        1px solid rgba(0, 234, 255, 0.15);
+
+    box-shadow:
+        inset 0 0 20px rgba(0, 150, 255, 0.05);
+
+    z-index: 20;
 }
 
+
+/* LEFT */
+
+.left-panel {
+
+    left: 7px;
+}
+
+
+/* RIGHT */
+
+.right-panel {
+
+    right: 7px;
+}
+
+
+/* PANEL CORNERS */
+
 .hud-panel::before {
+
     content: "";
 
     position: absolute;
@@ -233,15 +345,18 @@ body::before {
     top: 0;
     left: 0;
 
-    width: 35px;
+    width: 25px;
     height: 1px;
 
     background: var(--cyan);
 
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow:
+        0 0 8px var(--cyan);
 }
 
+
 .hud-panel::after {
+
     content: "";
 
     position: absolute;
@@ -249,109 +364,157 @@ body::before {
     bottom: 0;
     right: 0;
 
-    width: 35px;
+    width: 25px;
     height: 1px;
 
     background: var(--cyan);
 
-    box-shadow: 0 0 10px var(--cyan);
+    box-shadow:
+        0 0 8px var(--cyan);
 }
+
+
+/* PANEL TITLE */
 
 .panel-title {
+
     color: var(--cyan);
 
-    font-size: 12px;
+    font-size: 7px;
 
-    letter-spacing: 3px;
+    letter-spacing: 1.5px;
 
-    margin-bottom: 20px;
+    margin-bottom: 9px;
 
     text-shadow:
-        0 0 8px rgba(0, 234, 255, 0.7);
+        0 0 7px rgba(0, 234, 255, 0.7);
 }
 
+
+/* DATA */
+
 .data-line {
+
     display: flex;
 
     justify-content: space-between;
 
-    padding: 10px 0;
+    align-items: center;
 
-    border-bottom: 1px solid rgba(0, 234, 255, 0.08);
+    gap: 4px;
 
-    font-size: 10px;
+    padding: 7px 0;
 
-    letter-spacing: 1px;
+    border-bottom:
+        1px solid rgba(0, 234, 255, 0.08);
+
+    font-size: 6px;
+
+    letter-spacing: 0.5px;
 }
 
+
 .data-line span:last-child {
+
     color: var(--cyan);
 
     text-shadow:
-        0 0 8px rgba(0, 234, 255, 0.6);
+        0 0 7px rgba(0, 234, 255, 0.6);
+
+    text-align: right;
 }
 
 
-/* =========================================================
-   JARVIS CENTRAL CORE
-   ========================================================= */
+/* ============================================================
+   CENTRAL JARVIS CORE
+   ============================================================ */
 
 .jarvis-core {
 
-    width: 360px;
-    height: 360px;
+    position: absolute;
 
-    position: relative;
+    left: 50%;
+    top: 50%;
+
+    width: 205px;
+    height: 205px;
+
+    transform:
+        translate(-50%, -50%);
 
     display: flex;
-    justify-content: center;
+
     align-items: center;
+    justify-content: center;
+
+    z-index: 15;
 }
 
 
-/* Outer rings */
+/* ============================================================
+   OUTER RINGS
+   ============================================================ */
 
 .outer-ring {
+
     position: absolute;
 
     border-radius: 50%;
 
-    border: 1px solid rgba(0, 234, 255, 0.35);
+    border:
+        1px solid rgba(0, 234, 255, 0.35);
 
     box-shadow:
+
         0 0 10px rgba(0, 200, 255, 0.2),
+
         inset 0 0 10px rgba(0, 200, 255, 0.08);
 }
 
+
 .ring-one {
-    width: 350px;
-    height: 350px;
+
+    width: 205px;
+    height: 205px;
 
     border-top-color: var(--cyan);
+
     border-bottom-color: transparent;
 
-    animation: rotateClockwise 14s linear infinite;
+    animation:
+        rotateClockwise 14s linear infinite;
 }
+
 
 .ring-two {
-    width: 300px;
-    height: 300px;
+
+    width: 168px;
+    height: 168px;
 
     border-left-color: var(--cyan);
+
     border-right-color: transparent;
 
-    animation: rotateReverse 9s linear infinite;
+    animation:
+        rotateReverse 9s linear infinite;
 }
+
 
 .ring-three {
-    width: 250px;
-    height: 250px;
 
-    border-top-color: rgba(0, 234, 255, 0.8);
-    border-bottom-color: rgba(0, 140, 255, 0.4);
+    width: 135px;
+    height: 135px;
 
-    animation: rotateClockwise 6s linear infinite;
+    border-top-color:
+        rgba(0, 234, 255, 0.8);
+
+    border-bottom-color:
+        rgba(0, 140, 255, 0.4);
+
+    animation:
+        rotateClockwise 6s linear infinite;
 }
+
 
 @keyframes rotateClockwise {
 
@@ -362,7 +525,9 @@ body::before {
     to {
         transform: rotate(360deg);
     }
+
 }
+
 
 @keyframes rotateReverse {
 
@@ -373,166 +538,217 @@ body::before {
     to {
         transform: rotate(0deg);
     }
+
 }
 
 
-/* =========================================================
+/* ============================================================
    ENERGY RING
-   ========================================================= */
+   ============================================================ */
 
 .energy-ring {
+
     position: absolute;
 
-    width: 210px;
-    height: 210px;
+    width: 112px;
+    height: 112px;
 
     border-radius: 50%;
 
-    animation: rotateClockwise 5s linear infinite;
+    animation:
+        rotateClockwise 5s linear infinite;
 }
 
+
 .energy-segment {
+
     position: absolute;
 
-    width: 50px;
-    height: 3px;
+    width: 28px;
+    height: 2px;
 
     background: var(--cyan);
 
     box-shadow:
+
         0 0 8px var(--cyan),
-        0 0 20px var(--blue);
+
+        0 0 18px var(--blue);
 }
+
 
 .segment-one {
+
     top: 0;
-    left: 80px;
+    left: 42px;
 }
+
 
 .segment-two {
+
     right: 0;
-    top: 104px;
+    top: 55px;
 }
+
 
 .segment-three {
+
     bottom: 0;
-    left: 80px;
+    left: 42px;
 }
+
 
 .segment-four {
+
     left: 0;
-    top: 104px;
+    top: 55px;
 }
 
 
-/* =========================================================
+/* ============================================================
    CORE
-   ========================================================= */
+   ============================================================ */
 
 .core {
-    width: 130px;
-    height: 130px;
+
+    width: 74px;
+    height: 74px;
 
     border-radius: 50%;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     position: relative;
 
     background:
+
         radial-gradient(
             circle,
+
             rgba(180, 255, 255, 0.95) 0%,
+
             rgba(0, 234, 255, 0.65) 18%,
+
             rgba(0, 100, 180, 0.35) 45%,
+
             rgba(0, 20, 40, 0.8) 70%
         );
 
-    border: 2px solid var(--cyan);
+    border:
+        2px solid var(--cyan);
 
     box-shadow:
-        0 0 15px var(--cyan),
-        0 0 40px rgba(0, 200, 255, 0.8),
-        0 0 80px rgba(0, 120, 255, 0.5);
 
-    animation: corePulse 2s ease-in-out infinite;
+        0 0 15px var(--cyan),
+
+        0 0 35px rgba(0, 200, 255, 0.8),
+
+        0 0 65px rgba(0, 120, 255, 0.5);
+
+    animation:
+        corePulse 2s ease-in-out infinite;
 }
 
+
 .core-inner {
+
     position: absolute;
 
-    width: 75px;
-    height: 75px;
+    width: 48px;
+    height: 48px;
 
     border-radius: 50%;
 
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border:
+        1px solid rgba(255, 255, 255, 0.8);
 
     box-shadow:
         inset 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
+
 .core-text {
-    font-size: 55px;
+
+    font-size: 29px;
 
     font-weight: 200;
 
     color: white;
 
     text-shadow:
+
         0 0 10px white,
+
         0 0 25px var(--cyan),
+
         0 0 50px var(--blue);
 
     z-index: 2;
 }
 
+
 @keyframes corePulse {
 
     0%,
     100% {
+
         transform: scale(1);
 
         box-shadow:
+
             0 0 15px var(--cyan),
-            0 0 40px rgba(0, 200, 255, 0.8),
-            0 0 80px rgba(0, 120, 255, 0.5);
+
+            0 0 35px rgba(0, 200, 255, 0.8),
+
+            0 0 65px rgba(0, 120, 255, 0.5);
     }
 
     50% {
+
         transform: scale(1.06);
 
         box-shadow:
+
             0 0 25px var(--cyan),
-            0 0 60px rgba(0, 200, 255, 1),
-            0 0 100px rgba(0, 120, 255, 0.7);
+
+            0 0 55px rgba(0, 200, 255, 1),
+
+            0 0 85px rgba(0, 120, 255, 0.7);
     }
+
 }
 
 
-/* =========================================================
-   MESSAGE AREA
-   ========================================================= */
+/* ============================================================
+   MESSAGE
+   ============================================================ */
 
 .message-area {
 
+    position: fixed;
+
+    left: 18px;
+    right: 18px;
+
+    bottom: 142px;
+
+    min-height: 55px;
+
     text-align: center;
 
-    min-height: 75px;
-
-    position: relative;
-
-    z-index: 5;
+    z-index: 60;
 }
+
 
 .message-line {
 
-    width: 280px;
+    width: 180px;
     height: 1px;
 
-    margin: 0 auto 15px;
+    margin: 0 auto 10px;
 
     background: var(--cyan);
 
@@ -540,31 +756,52 @@ body::before {
         0 0 10px var(--cyan);
 }
 
+
 #jarvisMessage {
 
     color: var(--cyan);
 
-    font-size: 16px;
+    font-size: 11px;
 
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+
+    line-height: 1.4;
 
     text-shadow:
+
         0 0 8px var(--cyan),
+
         0 0 20px rgba(0, 200, 255, 0.5);
 
-    animation: textGlow 2s ease-in-out infinite;
+    animation:
+        textGlow 2s ease-in-out infinite;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
+
 
 .message-sub {
 
-    margin-top: 8px;
+    margin-top: 5px;
 
-    font-size: 9px;
+    font-size: 6px;
 
-    letter-spacing: 3px;
+    letter-spacing: 1.5px;
 
-    color: rgba(180, 240, 255, 0.5);
+    color:
+        rgba(180, 240, 255, 0.5);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
+
 
 @keyframes textGlow {
 
@@ -576,62 +813,103 @@ body::before {
     50% {
         opacity: 1;
     }
+
 }
 
 
-/* =========================================================
+/* ============================================================
    VOICE BUTTON
-   ========================================================= */
+   ============================================================ */
 
 .voice-section {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 70px;
+
+    transform:
+        translateX(-50%);
+
+    width: 100%;
 
     display: flex;
 
     justify-content: center;
 
-    padding: 15px 0 20px;
+    z-index: 100;
 }
 
+
 .voice-button {
+
+    width: 220px;
+    height: 48px;
 
     display: flex;
 
     align-items: center;
+    justify-content: center;
 
-    gap: 12px;
+    gap: 10px;
 
-    padding: 13px 25px;
+    padding: 0 15px;
 
-    background: rgba(0, 150, 220, 0.08);
+    border-radius: 28px;
+
+    background:
+        rgba(0, 150, 220, 0.10);
 
     color: var(--cyan);
 
-    border: 1px solid rgba(0, 234, 255, 0.5);
+    border:
+        1px solid rgba(0, 234, 255, 0.65);
 
-    cursor: pointer;
+    box-shadow:
 
-    font-size: 11px;
+        0 0 12px rgba(0, 200, 255, 0.25),
+
+        inset 0 0 12px rgba(0, 200, 255, 0.05);
+
+    font-size: 9px;
 
     letter-spacing: 2px;
 
-    transition: 0.3s;
+    cursor: pointer;
 
-    box-shadow:
-        0 0 15px rgba(0, 200, 255, 0.08);
+    -webkit-tap-highlight-color:
+        transparent;
+
+    touch-action: manipulation;
 }
 
-.voice-button:hover {
 
-    background: rgba(0, 234, 255, 0.15);
+.voice-button:active {
+
+    transform: scale(0.96);
+
+    background:
+        rgba(0, 234, 255, 0.18);
 
     box-shadow:
-        0 0 15px rgba(0, 234, 255, 0.4),
-        0 0 35px rgba(0, 140, 255, 0.2);
 
-    transform: translateY(-2px);
+        0 0 20px rgba(0, 234, 255, 0.6),
+
+        0 0 40px rgba(0, 140, 255, 0.3);
 }
+
+
+.voice-button.active {
+
+    animation:
+        voiceButtonPulse 1s infinite;
+}
+
 
 .mic-icon {
+
+    display: inline-block;
 
     font-size: 18px;
 
@@ -640,42 +918,101 @@ body::before {
 }
 
 
-/* =========================================================
+.voice-text {
+
+    font-size: 9px;
+
+    white-space: nowrap;
+}
+
+
+@keyframes voiceButtonPulse {
+
+    0% {
+
+        box-shadow:
+            0 0 10px rgba(0, 220, 255, 0.4);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 0 30px rgba(0, 220, 255, 0.9);
+
+    }
+
+    100% {
+
+        box-shadow:
+            0 0 10px rgba(0, 220, 255, 0.4);
+
+    }
+
+}
+
+
+/* ============================================================
    BOTTOM HUD
-   ========================================================= */
+   ============================================================ */
 
 .bottom-hud {
 
-    display: flex;
+    position: fixed;
 
-    justify-content: space-between;
+    left: 12px;
+    right: 12px;
+
+    bottom: 10px;
+
+    height: 40px;
+
+    display: flex;
 
     align-items: center;
 
-    padding-top: 12px;
+    justify-content: space-between;
 
-    border-top: 1px solid rgba(0, 234, 255, 0.2);
+    border-top:
+        1px solid rgba(0, 234, 255, 0.2);
 
-    font-size: 10px;
+    padding-top: 7px;
 
-    letter-spacing: 2px;
+    font-size: 7px;
 
-    color: rgba(180, 240, 255, 0.7);
+    letter-spacing: 1px;
 
-    z-index: 5;
+    color:
+        rgba(180, 240, 255, 0.7);
+
+    z-index: 80;
 }
+
 
 .bottom-hud > div {
 
     display: flex;
 
-    gap: 10px;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 3px;
+
+    min-width: 70px;
 }
+
 
 .bottom-label {
 
-    color: rgba(0, 234, 255, 0.45);
+    color:
+        rgba(0, 234, 255, 0.45);
+
+    font-size: 6px;
+
+    letter-spacing: 1.5px;
 }
+
 
 #time,
 #date,
@@ -683,682 +1020,287 @@ body::before {
 
     color: var(--cyan);
 
+    font-size: 8px;
+
+    letter-spacing: 0.7px;
+
     text-shadow:
         0 0 6px rgba(0, 234, 255, 0.6);
+
+    max-width: 100px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
 }
 
 
-/* =========================================================
-   MOBILE RESPONSIVE
-   ========================================================= */
+/* ============================================================
+   SAMSUNG A56 PORTRAIT OPTIMIZATION
+   ============================================================ */
 
-@media (max-width: 900px) {
-
-    .jarvis {
-        padding: 18px 15px;
-    }
-
-    .hud-area {
-        gap: 0;
-    }
-
-    .hud-panel {
-        display: none;
-    }
-
-    .jarvis-core {
-        width: 330px;
-        height: 330px;
-    }
-
-    .ring-one {
-        width: 320px;
-        height: 320px;
-    }
-
-    .ring-two {
-        width: 275px;
-        height: 275px;
-    }
-
-    .ring-three {
-        width: 230px;
-        height: 230px;
-    }
-
-    .main-text {
-        font-size: 22px;
-        letter-spacing: 5px;
-    }
-
-    .system-status {
-        font-size: 9px;
-    }
-
-    .bottom-hud {
-        font-size: 8px;
-    }
-}
-
-
-@media (max-width: 500px) {
+@media (max-width: 430px) and (orientation: portrait) {
 
     .top-hud {
-        padding-bottom: 10px;
+
+        top: 12px;
+
+        left: 14px;
+        right: 14px;
     }
 
-    .small-text {
-        font-size: 7px;
-        letter-spacing: 2px;
-    }
 
     .main-text {
-        font-size: 19px;
+
+        font-size: 20px;
+
         letter-spacing: 4px;
     }
 
+
     .system-status {
-        font-size: 7px;
+
+        font-size: 6.5px;
     }
+
+
+    .hud-area {
+
+        top: 72px;
+
+        height: 48vh;
+    }
+
+
+    .hud-panel {
+
+        width: 108px;
+
+        padding: 9px 7px;
+    }
+
+
+    .left-panel {
+
+        left: 5px;
+    }
+
+
+    .right-panel {
+
+        right: 5px;
+    }
+
 
     .jarvis-core {
-        width: 280px;
-        height: 280px;
-    }
 
-    .ring-one {
-        width: 275px;
-        height: 275px;
-    }
-
-    .ring-two {
-        width: 235px;
-        height: 235px;
-    }
-
-    .ring-three {
         width: 195px;
+
         height: 195px;
     }
 
-    .energy-ring {
-        width: 165px;
-        height: 165px;
+
+    .ring-one {
+
+        width: 195px;
+
+        height: 195px;
     }
 
-    .segment-one {
-        left: 57px;
+
+    .ring-two {
+
+        width: 160px;
+
+        height: 160px;
     }
 
-    .segment-two {
-        top: 81px;
+
+    .ring-three {
+
+        width: 128px;
+
+        height: 128px;
     }
 
-    .segment-three {
-        left: 57px;
+
+    .message-area {
+
+        bottom: 140px;
     }
 
-    .segment-four {
-        top: 81px;
+
+    .voice-section {
+
+        bottom: 67px;
     }
 
-    .core {
-        width: 105px;
-        height: 105px;
+
+    .voice-button {
+
+        width: 215px;
+
+        height: 48px;
     }
 
-    .core-inner {
-        width: 62px;
-        height: 62px;
-    }
-
-    .core-text {
-        font-size: 43px;
-    }
-
-    #jarvisMessage {
-        font-size: 12px;
-        letter-spacing: 2px;
-    }
-
-    .message-sub {
-        font-size: 7px;
-        letter-spacing: 2px;
-    }
 
     .bottom-hud {
-        gap: 5px;
+
+        bottom: 8px;
     }
 
-    .bottom-hud > div {
-        flex-direction: column;
-        gap: 3px;
-    }
-
-    #location {
-        max-width: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
 }
+
+
 /* ============================================================
-   J.A.R.V.I.S — MOBILE OPTIMIZATION
-   Samsung A56 / Android Chrome
+   VERY SMALL MOBILE
    ============================================================ */
 
-@media (max-width: 600px) {
+@media (max-width: 360px) {
 
-    html,
-    body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
+    .hud-panel {
 
-    body {
-        min-height: 100dvh;
-    }
+        width: 92px;
 
-    .jarvis {
-        position: relative;
-        width: 100%;
-        height: 100dvh;
-        min-height: 0;
-        overflow: hidden;
-    }
-
-
-    /* ========================================================
-       TOP HUD
-       ======================================================== */
-
-    .top-hud {
-        position: absolute;
-        top: 10px;
-        left: 14px;
-        right: 14px;
-
-        height: 55px;
-
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-
-        z-index: 20;
-    }
-
-    .system-name {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .small-text {
-        font-size: 7px;
-        letter-spacing: 3px;
-    }
-
-    .main-text {
-        font-size: 20px;
-        letter-spacing: 5px;
-    }
-
-    .system-status {
-        font-size: 7px;
-        letter-spacing: 1.5px;
-        margin-top: 7px;
-    }
-
-    .status-light {
-        width: 6px;
-        height: 6px;
-    }
-
-
-    /* ========================================================
-       MAIN HUD AREA
-       ======================================================== */
-
-    .hud-area {
-        position: absolute;
-
-        top: 70px;
-        left: 0;
-        right: 0;
-
-        height: 55%;
-
-        display: block;
-
-        margin: 0;
-        padding: 0;
-
-        z-index: 5;
-    }
-
-
-    /* ========================================================
-       LEFT SYSTEM PANEL
-       ======================================================== */
-
-    .left-panel {
-        position: absolute;
-
-        left: 10px;
-        top: 47%;
-
-        width: 135px;
-
-        padding: 12px 10px;
-
-        transform: translateY(-50%);
-
-        z-index: 10;
-    }
-
-
-    /* ========================================================
-       RIGHT DIAGNOSTICS PANEL
-       ======================================================== */
-
-    .right-panel {
-        position: absolute;
-
-        right: 10px;
-        top: 47%;
-
-        width: 135px;
-
-        padding: 12px 10px;
-
-        transform: translateY(-50%);
-
-        z-index: 10;
+        padding: 8px 5px;
     }
 
 
     .panel-title {
-        font-size: 8px;
-        letter-spacing: 2px;
-        margin-bottom: 12px;
-    }
 
-    .data-line {
-        font-size: 7px;
-        margin-bottom: 9px;
-        letter-spacing: 0.5px;
-    }
-
-
-    /* ========================================================
-       CENTRAL JARVIS CORE
-       ======================================================== */
-
-    .jarvis-core {
-        position: absolute;
-
-        left: 50%;
-        top: 47%;
-
-        width: 190px;
-        height: 190px;
-
-        transform: translate(-50%, -50%);
-
-        z-index: 8;
-    }
-
-    .outer-ring.ring-one {
-        width: 190px;
-        height: 190px;
-    }
-
-    .outer-ring.ring-two {
-        width: 155px;
-        height: 155px;
-    }
-
-    .outer-ring.ring-three {
-        width: 125px;
-        height: 125px;
-    }
-
-    .energy-ring {
-        width: 105px;
-        height: 105px;
-    }
-
-    .core {
-        width: 70px;
-        height: 70px;
-    }
-
-    .core-inner {
-        width: 48px;
-        height: 48px;
-    }
-
-    .core-text {
-        font-size: 28px;
-    }
-
-
-    /* ========================================================
-       MESSAGE AREA
-       ======================================================== */
-
-    .message-area {
-        position: absolute;
-
-        left: 20px;
-        right: 20px;
-
-        bottom: 145px;
-
-        margin: 0;
-
-        text-align: center;
-
-        z-index: 20;
-    }
-
-    #jarvisMessage {
-        font-size: 11px;
-        letter-spacing: 3px;
-        line-height: 1.5;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .message-sub {
         font-size: 6px;
-        letter-spacing: 1.5px;
-        margin-top: 5px;
-    }
 
-
-    /* ========================================================
-       VOICE BUTTON
-       ======================================================== */
-
-    .voice-section {
-        position: absolute;
-
-        left: 50%;
-        bottom: 78px;
-
-        transform: translateX(-50%);
-
-        width: auto;
-        margin: 0;
-
-        z-index: 30;
-    }
-
-    .voice-button {
-        min-width: 210px;
-
-        height: 46px;
-
-        padding: 0 20px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-
-        font-size: 9px;
-        letter-spacing: 2px;
-
-        border-radius: 25px;
-
-        cursor: pointer;
-
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    .mic-icon {
-        font-size: 17px;
-    }
-
-    .voice-text {
-        font-size: 9px;
-    }
-
-    .voice-button.active {
-        animation: voiceButtonPulse 1s infinite;
-    }
-
-    @keyframes voiceButtonPulse {
-
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 10px rgba(0, 220, 255, 0.4);
-        }
-
-        50% {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 220, 255, 0.9);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 10px rgba(0, 220, 255, 0.4);
-        }
-
-    }
-
-
-    /* ========================================================
-       BOTTOM HUD
-       ======================================================== */
-
-    .bottom-hud {
-        position: absolute;
-
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-
-        height: 42px;
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        z-index: 20;
-    }
-
-    .bottom-hud > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3px;
-    }
-
-    .bottom-label {
-        font-size: 6px;
-        letter-spacing: 1.5px;
-    }
-
-    #time,
-    #date,
-    #location {
-        font-size: 8px;
         letter-spacing: 1px;
     }
 
-}
 
+    .data-line {
 
-/* ============================================================
-   SMALL PHONES
-   ============================================================ */
+        font-size: 5.5px;
 
-@media (max-width: 380px) {
-
-    .left-panel,
-    .right-panel {
-        width: 120px;
-        padding: 9px 7px;
+        padding: 6px 0;
     }
+
 
     .jarvis-core {
-        width: 165px;
-        height: 165px;
+
+        width: 175px;
+
+        height: 175px;
     }
 
-    .outer-ring.ring-one {
-        width: 165px;
-        height: 165px;
+
+    .ring-one {
+
+        width: 175px;
+
+        height: 175px;
     }
 
-    .outer-ring.ring-two {
-        width: 135px;
-        height: 135px;
+
+    .ring-two {
+
+        width: 145px;
+
+        height: 145px;
     }
 
-    .outer-ring.ring-three {
-        width: 110px;
-        height: 110px;
+
+    .ring-three {
+
+        width: 115px;
+
+        height: 115px;
     }
+
 
     .voice-button {
-        min-width: 190px;
-        height: 44px;
-    }
 
-    .message-area {
-        bottom: 140px;
-    }
+        width: 200px;
 
-    .voice-section {
-        bottom: 72px;
+        height: 46px;
     }
 
 }
+
+
 /* ============================================================
-   JARVIS MOBILE - FORCE VOICE BUTTON VISIBILITY
+   LANDSCAPE MOBILE
    ============================================================ */
 
-@media screen and (max-width: 600px) {
+@media (max-height: 500px) and (orientation: landscape) {
 
-    html,
-    body {
-        width: 100% !important;
-        height: 100% !important;
-        min-height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
+    .top-hud {
+
+        top: 7px;
+
+        height: 40px;
     }
 
-    .jarvis {
-        width: 100% !important;
-        height: 100dvh !important;
-        min-height: 100dvh !important;
-        position: relative !important;
-        overflow: hidden !important;
+
+    .main-text {
+
+        font-size: 16px;
     }
 
-    /* VOICE SECTION */
-    .voice-section {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
 
-        position: fixed !important;
+    .hud-area {
 
-        left: 50% !important;
-        bottom: 70px !important;
+        top: 48px;
 
-        width: auto !important;
-        height: auto !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        transform: translateX(-50%) !important;
-
-        z-index: 9999 !important;
+        height: 55vh;
     }
 
-    /* VOICE BUTTON */
-    .voice-button {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
 
-        position: relative !important;
+    .jarvis-core {
 
-        width: 220px !important;
-        min-width: 220px !important;
-        max-width: 220px !important;
+        width: 150px;
 
-        height: 50px !important;
-        min-height: 50px !important;
-
-        align-items: center !important;
-        justify-content: center !important;
-
-        gap: 10px !important;
-
-        margin: 0 !important;
-        padding: 0 15px !important;
-
-        border-radius: 30px !important;
-
-        z-index: 10000 !important;
-
-        cursor: pointer !important;
-
-        -webkit-tap-highlight-color: transparent !important;
+        height: 150px;
     }
 
-    .mic-icon {
-        display: inline-block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
 
-        font-size: 18px !important;
+    .ring-one {
+
+        width: 150px;
+
+        height: 150px;
     }
 
-    .voice-text {
-        display: inline-block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
 
-        font-size: 9px !important;
-        white-space: nowrap !important;
+    .ring-two {
+
+        width: 125px;
+
+        height: 125px;
     }
 
-    /* MESSAGE */
+
+    .ring-three {
+
+        width: 100px;
+
+        height: 100px;
+    }
+
+
     .message-area {
-        position: fixed !important;
 
-        left: 20px !important;
-        right: 20px !important;
-        bottom: 135px !important;
-
-        margin: 0 !important;
-
-        z-index: 9000 !important;
-
-        text-align: center !important;
+        bottom: 82px;
     }
 
-    /* BOTTOM HUD */
+
+    .voice-section {
+
+        bottom: 25px;
+    }
+
+
     .bottom-hud {
-        position: fixed !important;
 
-        left: 10px !important;
-        right: 10px !important;
-        bottom: 10px !important;
-
-        z-index: 8000 !important;
+        display: none;
     }
+
 }
